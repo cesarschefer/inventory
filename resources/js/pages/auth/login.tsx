@@ -50,6 +50,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -79,6 +80,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -99,7 +101,7 @@ export default function Login({
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-4 w-full text-white"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -111,7 +113,7 @@ export default function Login({
 
                         {canRegister && (
                             <div className="text-center text-sm text-green-400">
-                                Don't have an account? {' '}
+                                Don't have an account?{' '}
                                 <TextLink
                                     href={register()}
                                     tabIndex={5}

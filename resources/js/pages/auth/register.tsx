@@ -38,6 +38,7 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Full name"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -60,6 +61,7 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -78,6 +80,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -96,6 +99,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Confirm password"
+                                    className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-400"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -104,7 +108,7 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 w-full text-white"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -114,7 +118,7 @@ export default function Register() {
                         </div>
 
                         <div className="text-center text-sm text-green-400">
-                            Already have an account? {' '}
+                            Already have an account?{' '}
                             <TextLink
                                 href={login()}
                                 tabIndex={6}
