@@ -35,7 +35,12 @@ export default function Login({
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    className="text-green-400"
+                                >
+                                    Email address
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -51,11 +56,16 @@ export default function Login({
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label
+                                        htmlFor="password"
+                                        className="text-green-400"
+                                    >
+                                        Password
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="ml-auto text-sm text-green-400 hover:text-green-300"
                                             tabIndex={5}
                                         >
                                             Forgot password?
@@ -79,7 +89,12 @@ export default function Login({
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label
+                                    htmlFor="remember"
+                                    className="text-green-400"
+                                >
+                                    Remember me
+                                </Label>
                             </div>
 
                             <Button
@@ -95,9 +110,13 @@ export default function Login({
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
+                            <div className="text-center text-sm text-green-400">
+                                Don't have an account? {' '}
+                                <TextLink
+                                    href={register()}
+                                    tabIndex={5}
+                                    className="hover:text-green-300"
+                                >
                                     Sign up
                                 </TextLink>
                             </div>
@@ -107,7 +126,7 @@ export default function Login({
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mb-4 text-center text-sm font-medium text-green-400">
                     {status}
                 </div>
             )}
