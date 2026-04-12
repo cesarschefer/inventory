@@ -71,34 +71,6 @@ export default function Welcome({
                             efficiently. Optimize your business with tools
                             designed to grow.
                         </p>
-
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            {auth.user ? (
-                                <Link
-                                    href={dashboard()}
-                                    className="rounded-md bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700"
-                                >
-                                    Go to Dashboard
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={login()}
-                                        className="rounded-md border border-white/30 bg-white/10 px-8 py-3 text-base font-medium text-white backdrop-blur-sm hover:bg-white/20"
-                                    >
-                                        Log in
-                                    </Link>
-                                    {canRegister && (
-                                        <Link
-                                            href={register()}
-                                            className="rounded-md bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700"
-                                        >
-                                            Create Account
-                                        </Link>
-                                    )}
-                                </>
-                            )}
-                        </div>
                     </div>
                 </main>
 
