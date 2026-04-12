@@ -97,6 +97,7 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
+                                    className="border-gray-600 data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500"
                                 />
                                 <Label
                                     htmlFor="remember"
