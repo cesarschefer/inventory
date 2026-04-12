@@ -114,11 +114,7 @@ export default function Login({
                         {canRegister && (
                             <div className="text-center text-sm text-green-400">
                                 Don't have an account?{' '}
-                                <TextLink
-                                    href={register()}
-                                    tabIndex={5}
-                                    className="hover:text-green-300"
-                                >
+                                <TextLink href={register()} tabIndex={5}>
                                     Sign up
                                 </TextLink>
                             </div>
