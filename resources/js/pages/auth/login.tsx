@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { Mail, Lock } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -39,7 +40,10 @@ export default function Login({
                                     htmlFor="email"
                                     className="text-green-400"
                                 >
-                                    Email address
+                                    <div className="flex items-center gap-2">
+                                        <Mail className="size-4" />
+                                        Email address
+                                    </div>
                                 </Label>
                                 <Input
                                     id="email"
@@ -61,12 +65,15 @@ export default function Login({
                                         htmlFor="password"
                                         className="text-green-400"
                                     >
-                                        Password
+                                        <div className="flex items-center gap-2">
+                                            <Lock className="size-4" />
+                                            Password
+                                        </div>
                                     </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm text-green-400 hover:text-green-300"
+                                            className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
                                             Forgot password?

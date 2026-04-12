@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { User, Mail, Lock, Key } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -27,7 +28,10 @@ export default function Register() {
                                     htmlFor="name"
                                     className="text-green-400"
                                 >
-                                    Full name
+                                    <div className="flex items-center gap-2">
+                                        <User className="size-4" />
+                                        Full name
+                                    </div>
                                 </Label>
                                 <Input
                                     id="name"
@@ -51,7 +55,10 @@ export default function Register() {
                                     htmlFor="email"
                                     className="text-green-400"
                                 >
-                                    Email address
+                                    <div className="flex items-center gap-2">
+                                        <Mail className="size-4" />
+                                        Email address
+                                    </div>
                                 </Label>
                                 <Input
                                     id="email"
@@ -71,7 +78,10 @@ export default function Register() {
                                     htmlFor="password"
                                     className="text-green-400"
                                 >
-                                    Password
+                                    <div className="flex items-center gap-2">
+                                        <Lock className="size-4" />
+                                        Password
+                                    </div>
                                 </Label>
                                 <PasswordInput
                                     id="password"
@@ -90,7 +100,10 @@ export default function Register() {
                                     htmlFor="password_confirmation"
                                     className="text-green-400"
                                 >
-                                    Confirm password
+                                    <div className="flex items-center gap-2">
+                                        <Key className="size-4" />
+                                        Confirm password
+                                    </div>
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
