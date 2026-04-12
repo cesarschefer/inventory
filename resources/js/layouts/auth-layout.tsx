@@ -1,5 +1,5 @@
 import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
-import AuthBackgroundLayout from '@/layouts/auth/auth-background-layout';
+import AuthCenteredLayout from '@/layouts/auth/auth-centered-layout';
 
 export default function AuthLayout({
     title = '',
@@ -14,13 +14,13 @@ export default function AuthLayout({
 }) {
     if (backgroundImage) {
         return (
-            <AuthBackgroundLayout
+            <AuthCenteredLayout
                 title={title}
                 description={description}
                 backgroundImage={backgroundImage}
             >
                 {children}
-            </AuthBackgroundLayout>
+            </AuthCenteredLayout>
         );
     }
 
