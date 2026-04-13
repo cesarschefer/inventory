@@ -21,7 +21,7 @@ export default function AuthCenteredLayout({
                 <Link href={home()} className="flex items-center gap-3">
                     <AppLogoIcon className="size-10 text-white" />
                     <span className="text-xl font-semibold text-white">
-                        Inventory
+                        StockFlow
                     </span>
                 </Link>
             </header>
