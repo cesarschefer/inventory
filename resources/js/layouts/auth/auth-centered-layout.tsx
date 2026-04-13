@@ -1,6 +1,6 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
-import { home } from '@/routes';
+import { dashboard, home, login, register } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
 export default function AuthCenteredLayout({
@@ -9,6 +9,9 @@ export default function AuthCenteredLayout({
     description,
     backgroundImage,
 }: AuthLayoutProps & { backgroundImage: string }) {
+    const { auth } = usePage().props;
+    const showRegister = !auth.user;
+
     return (
         <div className="relative min-h-screen">
             <div
@@ -24,6 +27,34 @@ export default function AuthCenteredLayout({
                         StockFlow
                     </span>
                 </Link>
+
+                <nav className="flex items-center gap-4">
+                    {auth.user ? (
+                        <Link
+                            href={dashboard()}
+                            className="rounded-md bg-white px-5 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+                        >
+                            Dashboard
+                        </Link>
+                    ) : (
+                        <>
+                            <Link
+                                href={login()}
+                                className="text-sm font-medium text-white/90 hover:text-white"
+                            >
+                                Log in
+                            </Link>
+                            {showRegister && (
+                                <Link
+                                    href={register()}
+                                    className="rounded-md bg-green-500 px-5 py-2 text-sm font-medium text-white hover:bg-green-600"
+                                >
+                                    Register
+                                </Link>
+                            )}
+                        </>
+                    )}
+                </nav>
             </header>
 
             <main className="relative z-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6">

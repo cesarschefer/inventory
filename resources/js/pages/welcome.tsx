@@ -47,7 +47,7 @@ export default function Welcome({
                                 {canRegister && (
                                     <Link
                                         href={register()}
-                                        className="rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                                        className="rounded-md bg-green-500 px-5 py-2 text-sm font-medium text-white hover:bg-green-600"
                                     >
                                         Register
                                     </Link>
@@ -61,7 +61,7 @@ export default function Welcome({
                     <div className="max-w-3xl">
                         <h1 className="mb-6 text-4xl font-bold text-white lg:text-6xl">
                             Inventory Management
-                            <span className="block text-blue-400">
+                            <span className="block text-green-500">
                                 Simplified
                             </span>
                         </h1>
@@ -76,17 +76,17 @@ export default function Welcome({
 
                 <div className="relative z-10 flex justify-center gap-8 px-6 py-8 lg:absolute lg:right-0 lg:bottom-0 lg:left-0">
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-2xl font-bold text-green-500">
                             500+
                         </div>
                         <div className="text-sm text-gray-400">Products</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-white">50+</div>
+                        <div className="text-2xl font-bold text-green-500">50+</div>
                         <div className="text-sm text-gray-400">Users</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-white">99%</div>
+                        <div className="text-2xl font-bold text-green-500">99%</div>
                         <div className="text-sm text-gray-400">Uptime</div>
                     </div>
                 </div>
