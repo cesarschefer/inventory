@@ -1,28 +1,13 @@
 import { Link } from '@inertiajs/react';
 
-const bgStyles: Record<string, { bg: string }> =
-{
-    emerald: {
-        bg: 'bg-emerald-500',
-    },
-    orange: {
-        bg: 'bg-orange-500',
-    },
-    amber: {
-        bg: 'bg-amber-500',
-    },
-    purple: {
-        bg: 'bg-purple-500',
-    },
-    indigo: {
-        bg: 'bg-indigo-500',
-    },
-    teal: {
-        bg: 'bg-teal-500',
-    },
-    rose: {
-        bg: 'bg-rose-500',
-    },
+const bgClasses: Record<string, string> = {
+    emerald: "bg-emerald-500 hover:bg-emerald-600",
+    orange: "bg-orange-500 hover:bg-orange-600",
+    amber: "bg-amber-500 hover:bg-amber-600",
+    purple: "bg-purple-500 hover:bg-purple-600",
+    indigo: "bg-indigo-500 hover:bg-indigo-600",
+    teal: "bg-teal-500 hover:bg-teal-600",
+    rose: "bg-rose-500 hover:bg-rose-600"
 };
 
 interface DashboardCardProps {
@@ -42,13 +27,13 @@ export default function DashboardCard({
     icon,
     total,
 }: DashboardCardProps) {
-    const style = bgStyles[bg] || bgStyles.emerald;
+    const style = bgClasses[bg] || bgClasses.emerald;
 
     return (
         <Link
             href={href}
             key={cardKey}
-            className={`group relative flex flex-col gap-3 rounded-xl border border-border/50 p-6 shadow-sm transition-all hover:border-border hover:shadow-md dark:border-sidebar-border/70 text-white ${style.bg}`}
+            className={`group relative flex flex-col gap-3 rounded-xl border border-border/50 p-6 shadow-sm transition-all hover:border-border hover:shadow-md dark:border-sidebar-border/70 text-white ${style}`}
         >
             <div className="flex items-center justify-between">
                 <span className="text-3xl">{icon}</span>
