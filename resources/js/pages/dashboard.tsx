@@ -13,7 +13,6 @@ type DashboardProps = {
     sale_invoices: number;
 };
 
-
 export default function Dashboard({
     customers,
     suppliers,
@@ -23,7 +22,6 @@ export default function Dashboard({
     purchase_invoices,
     sale_invoices,
 }: DashboardProps) {
-
     const totals = {
         customers,
         suppliers,
@@ -46,7 +44,6 @@ export default function Dashboard({
                             cardKey={card.key}
                             href={card.href}
                             bg={card.bg}
-                            icon={card.icon}
                             total={totals[card.key as keyof typeof totals] ?? 0}
                         />
                     ))}

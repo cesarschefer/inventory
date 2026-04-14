@@ -3,49 +3,42 @@
     "title": "Customers",
     "key": "customers",
     "href": "/dashboard/customers",
-    "bg": "emerald",
-    "icon": "👥"
+    "bg": "emerald"
   },
   {
     "title": "Suppliers",
     "key": "suppliers",
     "href": "/dashboard/suppliers",
-    "bg": "orange",
-    "icon": "🚚"
+    "bg": "orange"
   },
   {
     "title": "Product Categories",
     "key": "categories",
     "href": "/dashboard/categories",
-    "bg": "amber",
-    "icon": "🏷️"
+    "bg": "amber"
   },
   {
     "title": "Products",
     "key": "products",
     "href": "/dashboard/products",
-    "bg": "purple",
-    "icon": "📦"
+    "bg": "purple"
   },
   {
     "title": "Users",
     "key": "users",
     "href": "/dashboard/users",
-    "bg": "indigo",
-    "icon": "🧑‍💻"
+    "bg": "indigo"
   },
   {
     "title": "Purchase Invoices",
     "key": "purchase_invoices",
     "href": "/dashboard/purchase-invoices",
-    "bg": "teal",
-    "icon": "📑"
+    "bg": "teal"
   },
   {
     "title": "Sale Invoices",
     "key": "sale_invoices",
     "href": "/dashboard/sale-invoices",
-    "bg": "rose",
-    "icon": "💰"
+    "bg": "rose"
   }
 ]

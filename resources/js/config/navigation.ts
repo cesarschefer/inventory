@@ -1,5 +1,17 @@
 import type { NavItem } from '@/types';
-import { HomeIcon, ShieldCheckIcon, UserIcon, BriefcaseIcon, TagIcon, Store, ShoppingCart, ClipboardListIcon, BanknoteIcon, ArrowRightLeftIcon, ChartBarIcon } from 'lucide-react';
+import {
+    HomeIcon,
+    ShieldCheckIcon,
+    UserIcon,
+    BriefcaseIcon,
+    TagIcon,
+    Truck,
+    ShoppingCart,
+    FileText,
+    DollarSign,
+    ArrowRightLeftIcon,
+    ChartBarIcon
+} from 'lucide-react';
 import { dashboard } from '@/routes';
 
 export const mainNavItems: NavItem[] = [
@@ -31,7 +43,7 @@ export const mainNavItems: NavItem[] = [
     {
         title: 'Suppliers',
         href: dashboard(),
-        icon: Store,
+        icon: Truck,
     },
     {
         title: 'Products',
@@ -41,12 +53,12 @@ export const mainNavItems: NavItem[] = [
     {
         title: 'Purchase Invoices',
         href: dashboard(),
-        icon: ClipboardListIcon,
+        icon: FileText,
     },
     {
         title: 'Sale Invoices',
         href: dashboard(),
-        icon: BanknoteIcon,
+        icon: DollarSign,
     },
     {
         title: 'Stock Movements',
