@@ -2,43 +2,43 @@
   {
     "title": "Customers",
     "key": "customers",
-    "href": "/dashboard/customers",
+    "href": "/customers",
     "bg": "emerald"
   },
   {
     "title": "Suppliers",
     "key": "suppliers",
-    "href": "/dashboard/suppliers",
+    "href": "/suppliers",
     "bg": "orange"
   },
   {
     "title": "Product Categories",
     "key": "categories",
-    "href": "/dashboard/categories",
+    "href": "/categories",
     "bg": "amber"
   },
   {
     "title": "Products",
     "key": "products",
-    "href": "/dashboard/products",
+    "href": "/products",
     "bg": "purple"
   },
   {
     "title": "Users",
     "key": "users",
-    "href": "/dashboard/users",
+    "href": "/users",
     "bg": "indigo"
   },
   {
     "title": "Purchase Invoices",
     "key": "purchase_invoices",
-    "href": "/dashboard/purchase-invoices",
+    "href": "/purchase-invoices",
     "bg": "teal"
   },
   {
     "title": "Sale Invoices",
     "key": "sale_invoices",
-    "href": "/dashboard/sale-invoices",
+    "href": "/sale-invoices",
     "bg": "rose"
   }
 ]
