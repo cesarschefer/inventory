@@ -1,13 +1,28 @@
-import { Link } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
 
-const bgColors: Record<string, string> = {
-    emerald: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    orange: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-    amber: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    purple: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
-    indigo: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
-    teal: 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
-    rose: 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+const bgStyles: Record<string, { bg: string }> =
+{
+    emerald: {
+        bg: 'bg-emerald-500',
+    },
+    orange: {
+        bg: 'bg-orange-500',
+    },
+    amber: {
+        bg: 'bg-amber-500',
+    },
+    purple: {
+        bg: 'bg-purple-500',
+    },
+    indigo: {
+        bg: 'bg-indigo-500',
+    },
+    teal: {
+        bg: 'bg-teal-500',
+    },
+    rose: {
+        bg: 'bg-rose-500',
+    },
 };
 
 interface DashboardCardProps {
@@ -27,29 +42,25 @@ export default function DashboardCard({
     icon,
     total,
 }: DashboardCardProps) {
-    const colorClass = bgColors[bg] || 'bg-gray-500/10 text-gray-600';
+    const style = bgStyles[bg] || bgStyles.emerald;
 
     return (
         <Link
             href={href}
             key={cardKey}
-            className="group relative flex flex-col gap-3 rounded-xl border border-border/50 bg-card p-6 shadow-sm transition-all hover:border-border hover:shadow-md dark:border-sidebar-border/70"
+            className={`group relative flex flex-col gap-3 rounded-xl border border-border/50 p-6 shadow-sm transition-all hover:border-border hover:shadow-md dark:border-sidebar-border/70 text-white ${style.bg}`}
         >
             <div className="flex items-center justify-between">
+                <span className="text-3xl">{icon}</span>
                 <span
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClass}`}
+                    className={`text-3xl font-semibold tracking-tight text-white`}
                 >
-                    <span className="text-2xl">{icon}</span>
-                </span>
-                <span className="text-3xl font-semibold tracking-tight">
                     {total}
                 </span>
             </div>
             <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium text-muted-foreground">
-                    {title}
-                </span>
-                <span className="text-xs text-muted-foreground/60 transition-colors group-hover:text-muted-foreground">
+                <span className="text-sm font-medium">{title}</span>
+                <span className="text-xs opacity-60 transition-colors group-hover:opacity-100">
                     View all {title.toLowerCase()}
                 </span>
             </div>
