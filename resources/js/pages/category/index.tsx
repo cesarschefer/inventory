@@ -192,6 +192,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <Button
                             onClick={openCreateModal}
+                            variant="primary"
                             className="w-fit gap-2"
                         >
                             <Plus className="h-4 w-4" />
@@ -453,7 +454,11 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                             >
                                 Cancel
                             </Button>
-                            <Button type="submit" disabled={processing}>
+                            <Button
+                                type="submit"
+                                variant="primary"
+                                disabled={processing}
+                            >
                                 {processing ? (
                                     <span className="flex items-center gap-2">
                                         <RefreshCw className="h-4 w-4 animate-spin" />
