@@ -21,7 +21,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
             )}
 
             <div className="space-y-6">
-                <Form {...email.form()}>
+                <Form
+                    action={email.url()}
+                    method={email.definition.methods[0]}>
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
