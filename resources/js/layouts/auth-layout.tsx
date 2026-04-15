@@ -1,5 +1,5 @@
-import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
 import AuthCenteredLayout from '@/layouts/auth/auth-centered-layout';
+import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
 
 export default function AuthLayout({
     title = '',

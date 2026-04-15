@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
-import { dashboard } from '@/routes';
-import dashboardCards from '@/data/dashboard_cards.json';
 import DashboardCard from '@/components/dashboard-card';
+import dashboardCards from '@/data/dashboard_cards.json';
+import { dashboard } from '@/routes';
 
 type DashboardProps = {
     customers: number;

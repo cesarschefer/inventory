@@ -11,8 +11,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import { mainNavItems } from '@/config/navigation';
+import { dashboard } from '@/routes';
 
 export function AppSidebar() {
     return (

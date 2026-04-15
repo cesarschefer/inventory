@@ -1,4 +1,3 @@
-import type { NavItem } from '@/types';
 import {
     HomeIcon,
     ShieldCheckIcon,
@@ -14,6 +13,7 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
+import type { NavItem } from '@/types';
 
 export const mainNavItems: NavItem[] = [
     {
