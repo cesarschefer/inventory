@@ -13,6 +13,7 @@ import {
     ChartBarIcon
 } from 'lucide-react';
 import { dashboard } from '@/routes';
+import categories from '@/routes/categories';
 
 export const mainNavItems: NavItem[] = [
     {
@@ -37,7 +38,7 @@ export const mainNavItems: NavItem[] = [
     },
     {
         title: 'Categories',
-        href: dashboard(),
+        href: categories.index(),
         icon: TagIcon,
     },
     {
