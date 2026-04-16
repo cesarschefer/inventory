@@ -337,32 +337,32 @@ export default function CategoriesIndex({
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                    '3') && (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => {
-                                                                clearSearch();
-                                                                setCategoryActiveFilter(
-                                                                    '3',
-                                                                );
-                                                            }}
-                                                        >
-                                                            Clear Filters
-                                                        </Button>
-                                                    )}
+                                                        '3') && (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            clearSearch();
+                                                            setCategoryActiveFilter(
+                                                                '3',
+                                                            );
+                                                        }}
+                                                    >
+                                                        Clear Filters
+                                                    </Button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
@@ -550,6 +550,7 @@ export default function CategoriesIndex({
                                 variant="outline"
                                 onClick={closeModal}
                                 disabled={processing}
+                                className="cursor-pointer"
                             >
                                 Cancel
                             </Button>
@@ -557,6 +558,7 @@ export default function CategoriesIndex({
                                 type="submit"
                                 variant="primary"
                                 disabled={processing}
+                                className="cursor-pointer"
                             >
                                 {processing ? (
                                     <span className="flex items-center gap-2">
@@ -601,6 +603,7 @@ export default function CategoriesIndex({
                             type="button"
                             variant="outline"
                             onClick={() => setDeleteConfirmOpen(false)}
+                            className="cursor-pointer"
                         >
                             Cancel
                         </Button>
@@ -608,6 +611,7 @@ export default function CategoriesIndex({
                             type="button"
                             variant="destructive"
                             onClick={handleDelete}
+                            className="cursor-pointer"
                         >
                             Delete
                         </Button>
