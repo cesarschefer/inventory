@@ -69,8 +69,8 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
             categoryActiveFilter === '1'
                 ? !isInactive
                 : categoryActiveFilter === '2'
-                    ? isInactive
-                    : true;
+                  ? isInactive
+                  : true;
 
         return nameMatch && statusMatch;
     });
@@ -162,7 +162,6 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-
                             <p className="mt-1 text-sm text-muted-foreground">
                                 Manage your Product Categories for inventory
                                 organization
@@ -271,32 +270,32 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                    '3') && (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => {
-                                                                clearSearch();
-                                                                setCategoryActiveFilter(
-                                                                    '3',
-                                                                );
-                                                            }}
-                                                        >
-                                                            Clear Filters
-                                                        </Button>
-                                                    )}
+                                                        '3') && (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            clearSearch();
+                                                            setCategoryActiveFilter(
+                                                                '3',
+                                                            );
+                                                        }}
+                                                    >
+                                                        Clear Filters
+                                                    </Button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
@@ -368,13 +367,13 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                     ) : (
                                                         <Button
                                                             size="sm"
-                                                            variant="outline"
+                                                            variant="default"
                                                             onClick={() =>
                                                                 confirmDelete(
                                                                     category,
                                                                 )
                                                             }
-                                                            className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30"
+                                                            className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
                                                         >
                                                             <Trash className="h-4 w-4" />
                                                         </Button>
