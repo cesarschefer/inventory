@@ -14,17 +14,10 @@ import { toast } from 'sonner';
 
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
+import { FormDialog } from '@/components/shared/form-dialog';
 import { PageFilters } from '@/components/shared/page-filters';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -488,118 +481,79 @@ export default function CategoriesIndex({
             </div>
 
             {/* Create/Edit Modal */}
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                        <DialogTitle>
-                            {editingCategory
-                                ? 'Edit Category'
-                                : 'Create New Category'}
-                        </DialogTitle>
-                        <DialogDescription>
-                            {editingCategory
-                                ? 'Update the category name below.'
-                                : 'Add a new category to organize your inventory.'}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit}>
-                        <div className="py-4">
-                            <Label
-                                htmlFor="name"
-                                className="text-sm font-medium text-foreground"
-                            >
-                                Category Name
-                            </Label>
-                            <Input
-                                id="name"
-                                value={data.name}
-                                onChange={(e) =>
-                                    setData('name', e.target.value)
-                                }
-                                placeholder="Enter category name"
-                                className={`mt-1.5 ${errors.name ? 'border-destructive' : ''}`}
-                                autoFocus
-                            />
-                            {errors.name && (
-                                <p className="mt-1.5 text-sm text-destructive">
-                                    {errors.name}
-                                </p>
-                            )}
-                        </div>
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={closeModal}
-                                disabled={processing}
-                                className="cursor-pointer"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="primary"
-                                disabled={processing}
-                                className="cursor-pointer"
-                            >
-                                {processing ? (
-                                    <span className="flex items-center gap-2">
-                                        <RefreshCw className="h-4 w-4 animate-spin" />
-                                        {editingCategory
-                                            ? 'Updating...'
-                                            : 'Creating...'}
-                                    </span>
-                                ) : editingCategory ? (
-                                    'Save Changes'
-                                ) : (
-                                    'Create Category'
-                                )}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <FormDialog
+                open={isModalOpen}
+                onOpenChange={setIsModalOpen}
+                title={
+                    editingCategory ? 'Edit Category' : 'Create New Category'
+                }
+                description={
+                    editingCategory
+                        ? 'Update the category name below.'
+                        : 'Add a new category to organize your inventory.'
+                }
+                onSubmit={handleSubmit}
+                actions={[
+                    {
+                        label: 'Cancel',
+                        variant: 'outline',
+                        onClick: closeModal,
+                        disabled: processing,
+                    },
+                    {
+                        label: editingCategory
+                            ? 'Save Changes'
+                            : 'Create Category',
+                        variant: 'primary',
+                        type: 'submit',
+                        loading: processing,
+                        loadingLabel: editingCategory
+                            ? 'Updating...'
+                            : 'Creating...',
+                    },
+                ]}
+            >
+                <Label
+                    htmlFor="name"
+                    className="text-sm font-medium text-foreground"
+                >
+                    Category Name
+                </Label>
+                <Input
+                    id="name"
+                    value={data.name}
+                    onChange={(e) => setData('name', e.target.value)}
+                    placeholder="Enter category name"
+                    className={`mt-1.5 ${errors.name ? 'border-destructive' : ''}`}
+                    autoFocus
+                />
+                {errors.name && (
+                    <p className="mt-1.5 text-sm text-destructive">
+                        {errors.name}
+                    </p>
+                )}
+            </FormDialog>
 
             {/* Delete Confirmation Dialog */}
-            <Dialog
+            <FormDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
-            >
-                <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10">
-                                <Trash className="h-4 w-4 text-destructive" />
-                            </span>
-                            Delete Category
-                        </DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to delete &quot;
-                            {categoryToDelete?.name}&quot;? This action can be
-                            undone by restoring the category from the inactive
-                            list.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="gap-2 sm:justify-end">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setDeleteConfirmOpen(false)}
-                            className="cursor-pointer"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            onClick={handleDelete}
-                            className="cursor-pointer"
-                        >
-                            Delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                title="Delete Category"
+                description={`Are you sure you want to delete "${categoryToDelete?.name}"? This action can be undone by restoring the category from the inactive list.`}
+                icon={<Trash className="h-4 w-4 text-destructive" />}
+                actions={[
+                    {
+                        label: 'Cancel',
+                        variant: 'outline',
+                        onClick: () => setDeleteConfirmOpen(false),
+                    },
+                    {
+                        label: 'Delete',
+                        variant: 'destructive',
+                        onClick: handleDelete,
+                    },
+                ]}
+            />
         </>
     );
 }
