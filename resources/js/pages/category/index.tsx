@@ -69,8 +69,8 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
             categoryActiveFilter === '1'
                 ? !isInactive
                 : categoryActiveFilter === '2'
-                  ? isInactive
-                  : true;
+                    ? isInactive
+                    : true;
 
         return nameMatch && statusMatch;
     });
@@ -157,7 +157,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
         <>
             <Head title="Categories" />
 
-            <div className="mt-3 space-y-8 px-4 sm:px-6">
+            <div className="mt-3 mb-4 space-y-8 px-4 sm:px-6">
                 {/* Page Header */}
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -270,32 +270,32 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                        '3') && (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            clearSearch();
-                                                            setCategoryActiveFilter(
-                                                                '3',
-                                                            );
-                                                        }}
-                                                    >
-                                                        Clear Filters
-                                                    </Button>
-                                                )}
+                                                    '3') && (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                clearSearch();
+                                                                setCategoryActiveFilter(
+                                                                    '3',
+                                                                );
+                                                            }}
+                                                        >
+                                                            Clear Filters
+                                                        </Button>
+                                                    )}
                                             </div>
                                         </td>
                                     </tr>
