@@ -15,10 +15,50 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withTrashed()->get();
+        $search = request('search', '');
+        $status = request('status', '1');
+        $page = request('page', 1);
+
+        $query = Category::withTrashed();
+
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        if ($status === '1') {
+            $query->whereNull('deleted_at');
+        } elseif ($status === '2') {
+            $query->whereNotNull('deleted_at');
+        }
+
+        $categories = $query->paginate(
+            perPage: 5,
+            page: $page
+        );
+
+        $activeCount = Category::count();
+        $inactiveCount = Category::onlyTrashed()->count();
 
         return Inertia::render('category/index', [
-            'categories' => CategoryResource::collection($categories),
+            'categories' => [
+                'data' => CategoryResource::collection($categories)->resolve(),
+                'current_page' => $categories->currentPage(),
+                'last_page' => $categories->lastPage(),
+                'per_page' => $categories->perPage(),
+                'total' => $categories->total(),
+                'from' => $categories->firstItem(),
+                'to' => $categories->lastItem(),
+                'next_page_url' => $categories->nextPageUrl(),
+                'prev_page_url' => $categories->previousPageUrl(),
+            ],
+            'counts' => [
+                'active' => $activeCount,
+                'inactive' => $inactiveCount,
+            ],
+            'filters' => [
+                'search' => $search,
+                'status' => $status,
+            ],
         ]);
     }
 
@@ -30,6 +70,7 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->input('name'),
         ]);
+
         return redirect(route('categories.index'));
     }
 
@@ -61,6 +102,7 @@ class CategoryController extends Controller
         }
 
         $category->delete();
+
         return redirect(route('categories.index'));
     }
 
@@ -71,6 +113,7 @@ class CategoryController extends Controller
     {
         $category = Category::withTrashed()->findOrFail($id);
         $category->restore();
+
         return redirect(route('categories.index'));
     }
 }

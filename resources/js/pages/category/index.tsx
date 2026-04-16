@@ -1,9 +1,19 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { PenSquare, Plus, RefreshCw, Search, Trash, X } from 'lucide-react';
+import {
+    PenSquare,
+    Plus,
+    RefreshCw,
+    Search,
+    Trash,
+    X,
+    ChevronLeft,
+    ChevronRight,
+} from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
+import { index as categoriesIndex } from '@/routes/categories';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -34,14 +44,34 @@ type Category = {
 type CategoriesPageProps = {
     categories: {
         data: Category[];
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+        from: number | null;
+        to: number | null;
+        next_page_url: string | null;
+        prev_page_url: string | null;
+    };
+    counts: {
+        active: number;
+        inactive: number;
+    };
+    filters: {
+        search: string;
+        status: string;
     };
 };
 
-export default function CategoriesIndex({ categories }: CategoriesPageProps) {
-    const [nameFilter, setNameFilter] = useState('');
+export default function CategoriesIndex({
+    categories,
+    counts,
+    filters,
+}: CategoriesPageProps) {
+    const [nameFilter, setNameFilter] = useState(filters.search);
     const [categoryActiveFilter, setCategoryActiveFilter] = useState<
         '1' | '2' | '3'
-    >('1');
+    >(filters.status as '1' | '2' | '3');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<Category | null>(
         null,
@@ -52,28 +82,64 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
     );
     const [restoringId, setRestoringId] = useState<number | null>(null);
 
+    const currentPage = categories.current_page;
+    const lastPage = categories.last_page;
+
+    const handlePageChange = (page: number) => {
+        router.get(
+            categoriesIndex({
+                query: {
+                    page,
+                    search: nameFilter,
+                    status: categoryActiveFilter,
+                },
+            }).url,
+            {},
+            { replace: true },
+        );
+    };
+
     const { data, setData, post, put, processing, errors, reset, clearErrors } =
         useForm({
             name: '',
         });
 
-    const activeCategories = categories.data.filter((c) => !c.deleted_at);
-    const inactiveCategories = categories.data.filter((c) => c.deleted_at);
+    const handleSearch = () => {
+        router.get(
+            categoriesIndex({
+                query: {
+                    page: 1,
+                    search: nameFilter,
+                    status: categoryActiveFilter,
+                },
+            }).url,
+            {},
+            { replace: true },
+        );
+    };
 
-    const filteredCategories = categories.data.filter((category) => {
-        const nameMatch = category.name
-            .toLowerCase()
-            .includes(nameFilter.toLowerCase());
-        const isInactive = category.deleted_at !== null;
-        const statusMatch =
-            categoryActiveFilter === '1'
-                ? !isInactive
-                : categoryActiveFilter === '2'
-                  ? isInactive
-                  : true;
+    const handleStatusChange = (value: string) => {
+        setCategoryActiveFilter(value as '1' | '2' | '3');
+        router.get(
+            categoriesIndex({
+                query: { page: 1, search: nameFilter, status: value },
+            }).url,
+            {},
+            { replace: true },
+        );
+    };
 
-        return nameMatch && statusMatch;
-    });
+    const clearSearch = () => {
+        setNameFilter('');
+        setCategoryActiveFilter('3');
+        router.get(
+            categoriesIndex({
+                query: { page: 1, search: '', status: '3' },
+            }).url,
+            {},
+            { replace: true },
+        );
+    };
 
     const openCreateModal = () => {
         reset();
@@ -149,10 +215,6 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
         );
     };
 
-    const clearSearch = () => {
-        setNameFilter('');
-    };
-
     return (
         <>
             <Head title="Categories" />
@@ -171,13 +233,13 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                             <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 dark:border-emerald-800 dark:bg-emerald-950/30">
                                 <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
                                 <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                                    {activeCategories.length} Active
+                                    {counts.active} Active
                                 </span>
                             </div>
                             <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-1.5">
                                 <span className="h-2 w-2 rounded-full bg-muted-foreground"></span>
                                 <span className="text-sm font-semibold text-muted-foreground">
-                                    {inactiveCategories.length} Inactive
+                                    {counts.inactive} Inactive
                                 </span>
                             </div>
                         </div>
@@ -205,11 +267,20 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                     onChange={(e) =>
                                         setNameFilter(e.target.value)
                                     }
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSearch();
+                                        }
+                                    }}
+                                    onBlur={handleSearch}
                                     className="pr-8 pl-9 sm:w-56"
                                 />
                                 {nameFilter && (
                                     <button
-                                        onClick={clearSearch}
+                                        onClick={() => {
+                                            setNameFilter('');
+                                            handleSearch();
+                                        }}
                                         className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                                     >
                                         <X className="h-3.5 w-3.5" />
@@ -218,19 +289,15 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                             </div>
                             <Select
                                 value={categoryActiveFilter}
-                                onValueChange={(v) =>
-                                    setCategoryActiveFilter(
-                                        v as '1' | '2' | '3',
-                                    )
-                                }
+                                onValueChange={handleStatusChange}
                             >
                                 <SelectTrigger className="sm:w-40">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="3">All</SelectItem>
                                     <SelectItem value="1">Active</SelectItem>
                                     <SelectItem value="2">Inactive</SelectItem>
+                                    <SelectItem value="3">All</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -258,7 +325,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
-                                {filteredCategories.length === 0 ? (
+                                {categories.data.length === 0 ? (
                                     <tr>
                                         <td
                                             colSpan={4}
@@ -270,130 +337,169 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                        '3') && (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            clearSearch();
-                                                            setCategoryActiveFilter(
-                                                                '3',
-                                                            );
-                                                        }}
-                                                    >
-                                                        Clear Filters
-                                                    </Button>
-                                                )}
+                                                    '3') && (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                clearSearch();
+                                                                setCategoryActiveFilter(
+                                                                    '3',
+                                                                );
+                                                            }}
+                                                        >
+                                                            Clear Filters
+                                                        </Button>
+                                                    )}
                                             </div>
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredCategories.map((category) => {
-                                        const isInactive =
-                                            category.deleted_at !== null;
+                                    categories.data.map(
+                                        (category: Category) => {
+                                            const isInactive =
+                                                category.deleted_at !== null;
 
-                                        return (
-                                            <tr
-                                                key={category.id}
-                                                className="transition-colors hover:bg-muted/30"
-                                            >
-                                                <td className="px-5 py-4 font-medium text-foreground">
-                                                    {category.name}
-                                                </td>
-                                                <td className="px-5 py-4 text-center">
-                                                    {isInactive ? (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400">
-                                                            <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                                                            Inactive
-                                                        </span>
-                                                    ) : (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-                                                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                                            Active
-                                                        </span>
-                                                    )}
-                                                </td>
-                                                <td className="px-5 py-4 text-center">
-                                                    <Button
-                                                        size="sm"
-                                                        variant="outline"
-                                                        onClick={() =>
-                                                            openEditModal(
-                                                                category,
-                                                            )
-                                                        }
-                                                        disabled={isInactive}
-                                                        className={
-                                                            isInactive
-                                                                ? 'cursor-not-allowed opacity-50'
-                                                                : 'cursor-pointer'
-                                                        }
-                                                    >
-                                                        <PenSquare className="h-4 w-4" />
-                                                    </Button>
-                                                </td>
-                                                <td className="px-5 py-4 text-center">
-                                                    {isInactive ? (
+                                            return (
+                                                <tr
+                                                    key={category.id}
+                                                    className="transition-colors hover:bg-muted/30"
+                                                >
+                                                    <td className="px-5 py-4 font-medium text-foreground">
+                                                        {category.name}
+                                                    </td>
+                                                    <td className="px-5 py-4 text-center">
+                                                        {isInactive ? (
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                                                Inactive
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                                                Active
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="px-5 py-4 text-center">
                                                         <Button
                                                             size="sm"
-                                                            variant="default"
+                                                            variant="outline"
                                                             onClick={() =>
-                                                                handleRestore(
-                                                                    category.id,
-                                                                )
-                                                            }
-                                                            disabled={
-                                                                restoringId ===
-                                                                category.id
-                                                            }
-                                                            className={`bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 ${restoringId === category.id ? '' : 'cursor-pointer'}`}
-                                                        >
-                                                            <RefreshCw
-                                                                className={`h-4 w-4 ${restoringId === category.id ? 'animate-spin' : ''}`}
-                                                            />
-                                                        </Button>
-                                                    ) : (
-                                                        <Button
-                                                            size="sm"
-                                                            variant="default"
-                                                            onClick={() =>
-                                                                confirmDelete(
+                                                                openEditModal(
                                                                     category,
                                                                 )
                                                             }
-                                                            className="cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                                                            disabled={
+                                                                isInactive
+                                                            }
+                                                            className={
+                                                                isInactive
+                                                                    ? 'cursor-not-allowed opacity-50'
+                                                                    : 'cursor-pointer'
+                                                            }
                                                         >
-                                                            <Trash className="h-4 w-4" />
+                                                            <PenSquare className="h-4 w-4" />
                                                         </Button>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                                    </td>
+                                                    <td className="px-5 py-4 text-center">
+                                                        {isInactive ? (
+                                                            <Button
+                                                                size="sm"
+                                                                variant="default"
+                                                                onClick={() =>
+                                                                    handleRestore(
+                                                                        category.id,
+                                                                    )
+                                                                }
+                                                                disabled={
+                                                                    restoringId ===
+                                                                    category.id
+                                                                }
+                                                                className={`bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 ${restoringId === category.id ? '' : 'cursor-pointer'}`}
+                                                            >
+                                                                <RefreshCw
+                                                                    className={`h-4 w-4 ${restoringId === category.id ? 'animate-spin' : ''}`}
+                                                                />
+                                                            </Button>
+                                                        ) : (
+                                                            <Button
+                                                                size="sm"
+                                                                variant="default"
+                                                                onClick={() =>
+                                                                    confirmDelete(
+                                                                        category,
+                                                                    )
+                                                                }
+                                                                className="cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                                                            >
+                                                                <Trash className="h-4 w-4" />
+                                                            </Button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        },
+                                    )
                                 )}
                             </tbody>
                         </table>
                     </div>
 
                     {/* Footer */}
-                    {filteredCategories.length > 0 && (
+                    {categories.data.length > 0 && (
                         <div className="border-t border-border bg-muted/30 px-5 py-3">
-                            <p className="text-xs text-muted-foreground">
-                                Showing {filteredCategories.length} of{' '}
-                                {categories.data.length} categories
-                            </p>
+                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                <p className="text-xs text-muted-foreground">
+                                    Showing {categories.from} to {categories.to}{' '}
+                                    of {categories.total} categories
+                                </p>
+                                {lastPage > 1 && (
+                                    <div className="flex items-center gap-1">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    currentPage - 1,
+                                                )
+                                            }
+                                            disabled={!categories.prev_page_url}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <ChevronLeft className="h-4 w-4" />
+                                        </Button>
+                                        <span className="px-2 text-xs text-muted-foreground">
+                                            Page {currentPage} of {lastPage}
+                                        </span>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    currentPage + 1,
+                                                )
+                                            }
+                                            disabled={!categories.next_page_url}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <ChevronRight className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
