@@ -32,7 +32,7 @@ class CategoryController extends Controller
         }
 
         $categories = $query->paginate(
-            perPage: 5,
+            perPage: 10,
             page: $page
         );
 

@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
