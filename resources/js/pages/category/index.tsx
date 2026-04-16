@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
+import { PageFilters } from '@/components/shared/page-filters';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -224,68 +225,72 @@ export default function CategoriesIndex({
                 <PageHeader
                     description="Manage your Product Categories for inventory organization"
                     badges={[
-                        { label: 'Active', count: counts.active, variant: 'active' },
-                        { label: 'Inactive', count: counts.inactive, variant: 'inactive' },
+                        {
+                            label: 'Active',
+                            count: counts.active,
+                            variant: 'active',
+                        },
+                        {
+                            label: 'Inactive',
+                            count: counts.inactive,
+                            variant: 'inactive',
+                        },
                     ]}
                 />
 
                 {/* Filters & Actions */}
-                <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <Button
-                            onClick={openCreateModal}
-                            variant="primary"
-                            className="w-fit cursor-pointer gap-2"
-                        >
-                            <Plus className="h-4 w-4" />
-                            New Category
-                        </Button>
+                <PageFilters>
+                    <Button
+                        onClick={openCreateModal}
+                        variant="primary"
+                        className="w-fit cursor-pointer gap-2"
+                    >
+                        <Plus className="h-4 w-4" />
+                        New Category
+                    </Button>
 
-                        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-                            <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search categories..."
-                                    value={nameFilter}
-                                    onChange={(e) =>
-                                        setNameFilter(e.target.value)
+                    <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                        <div className="relative">
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                placeholder="Search categories..."
+                                value={nameFilter}
+                                onChange={(e) => setNameFilter(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleSearch();
                                     }
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleSearch();
-                                        }
+                                }}
+                                onBlur={handleSearch}
+                                className="pr-8 pl-9 sm:w-56"
+                            />
+                            {nameFilter && (
+                                <button
+                                    onClick={() => {
+                                        setNameFilter('');
+                                        handleSearch();
                                     }}
-                                    onBlur={handleSearch}
-                                    className="pr-8 pl-9 sm:w-56"
-                                />
-                                {nameFilter && (
-                                    <button
-                                        onClick={() => {
-                                            setNameFilter('');
-                                            handleSearch();
-                                        }}
-                                        className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                                    >
-                                        <X className="h-3.5 w-3.5" />
-                                    </button>
-                                )}
-                            </div>
-                            <Select
-                                value={categoryActiveFilter}
-                                onValueChange={handleStatusChange}
-                            >
-                                <SelectTrigger className="sm:w-40">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">Active</SelectItem>
-                                    <SelectItem value="2">Inactive</SelectItem>
-                                    <SelectItem value="3">All</SelectItem>
-                                </SelectContent>
-                            </Select>
+                                    className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                                >
+                                    <X className="h-3.5 w-3.5" />
+                                </button>
+                            )}
                         </div>
+                        <Select
+                            value={categoryActiveFilter}
+                            onValueChange={handleStatusChange}
+                        >
+                            <SelectTrigger className="sm:w-40">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="1">Active</SelectItem>
+                                <SelectItem value="2">Inactive</SelectItem>
+                                <SelectItem value="3">All</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
-                </div>
+                </PageFilters>
 
                 {/* Table */}
                 <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
@@ -320,32 +325,32 @@ export default function CategoriesIndex({
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                        categoryActiveFilter !== '3'
+                                                    categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                    '3') && (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => {
-                                                                clearSearch();
-                                                                setCategoryActiveFilter(
-                                                                    '3',
-                                                                );
-                                                            }}
-                                                        >
-                                                            Clear Filters
-                                                        </Button>
-                                                    )}
+                                                        '3') && (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            clearSearch();
+                                                            setCategoryActiveFilter(
+                                                                '3',
+                                                            );
+                                                        }}
+                                                    >
+                                                        Clear Filters
+                                                    </Button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
