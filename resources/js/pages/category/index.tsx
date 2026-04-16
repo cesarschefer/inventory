@@ -159,25 +159,25 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
 
             <div className="mt-3 space-y-8 px-4 sm:px-6">
                 {/* Page Header */}
-                <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
+                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
 
-                            <p className="mt-1 text-sm text-gray-500">
-                                Manage your product categories for inventory
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Manage your Product Categories for inventory
                                 organization
                             </p>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 dark:border-emerald-800 dark:bg-emerald-950/30">
                                 <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-                                <span className="text-sm font-medium text-emerald-700">
+                                <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
                                     {activeCategories.length} Active
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5">
-                                <span className="h-2 w-2 rounded-full bg-gray-400"></span>
-                                <span className="text-sm font-medium text-gray-600">
+                            <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-1.5">
+                                <span className="h-2 w-2 rounded-full bg-muted-foreground"></span>
+                                <span className="text-sm font-semibold text-muted-foreground">
                                     {inactiveCategories.length} Inactive
                                 </span>
                             </div>
@@ -185,8 +185,8 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                     </div>
                 </div>
 
-                {/* Filters & Actions Card */}
-                <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
+                {/* Filters & Actions */}
+                <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <Button
                             onClick={openCreateModal}
@@ -199,7 +199,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
 
                         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                             <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     placeholder="Search categories..."
                                     value={nameFilter}
@@ -211,7 +211,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                 {nameFilter && (
                                     <button
                                         onClick={clearSearch}
-                                        className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                                        className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                                     >
                                         <X className="h-3.5 w-3.5" />
                                     </button>
@@ -238,27 +238,27 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                     </div>
                 </div>
 
-                {/* Table Card */}
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
+                {/* Table */}
+                <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                            <thead>
-                                <tr className="border-b border-gray-200 bg-gray-50 text-xs tracking-wide text-gray-600 uppercase">
-                                    <th className="px-5 py-3 text-left font-medium">
+                            <thead className="bg-muted/50">
+                                <tr>
+                                    <th className="px-5 py-3.5 text-left text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         Name
                                     </th>
-                                    <th className="w-28 px-5 py-3 text-center font-medium">
+                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         Status
                                     </th>
-                                    <th className="w-24 px-5 py-3 text-center font-medium">
+                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         Edit
                                     </th>
-                                    <th className="w-24 px-5 py-3 text-center font-medium">
+                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                         Actions
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-border">
                                 {filteredCategories.length === 0 ? (
                                     <tr>
                                         <td
@@ -266,25 +266,21 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                             className="px-5 py-16 text-center"
                                         >
                                             <div className="flex flex-col items-center gap-3">
-                                                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-                                                    <Search className="h-8 w-8 text-gray-300" />
+                                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted">
+                                                    <Search className="h-7 w-7 text-muted-foreground/50" />
                                                 </div>
-                                                <div>
-                                                    <p className="font-medium text-gray-900">
-                                                        {nameFilter ||
-                                                            categoryActiveFilter !==
-                                                            '3'
-                                                            ? 'No categories match your filters'
-                                                            : 'No categories yet'}
-                                                    </p>
-                                                    <p className="mt-1 text-sm text-gray-500">
-                                                        {nameFilter ||
-                                                            categoryActiveFilter !==
-                                                            '3'
-                                                            ? 'Try adjusting your search or filter criteria'
-                                                            : 'Create your first category to get started'}
-                                                    </p>
-                                                </div>
+                                                <p className="font-medium text-foreground">
+                                                    {nameFilter ||
+                                                        categoryActiveFilter !== '3'
+                                                        ? 'No categories match your filters'
+                                                        : 'No categories yet'}
+                                                </p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {nameFilter ||
+                                                        categoryActiveFilter !== '3'
+                                                        ? 'Try adjusting your search or filter criteria'
+                                                        : 'Create your first category to get started'}
+                                                </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
                                                     '3') && (
@@ -312,19 +308,19 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                         return (
                                             <tr
                                                 key={category.id}
-                                                className="transition-colors hover:bg-gray-50"
+                                                className="transition-colors hover:bg-muted/30"
                                             >
-                                                <td className="px-5 py-4 font-medium text-gray-800">
+                                                <td className="px-5 py-4 font-medium text-foreground">
                                                     {category.name}
                                                 </td>
                                                 <td className="px-5 py-4 text-center">
                                                     {isInactive ? (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700">
+                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400">
                                                             <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
                                                             Inactive
                                                         </span>
                                                     ) : (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                                                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
                                                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                                             Active
                                                         </span>
@@ -363,7 +359,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                                 restoringId ===
                                                                 category.id
                                                             }
-                                                            className="border-emerald-200 text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50"
+                                                            className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30"
                                                         >
                                                             <RefreshCw
                                                                 className={`h-4 w-4 ${restoringId === category.id ? 'animate-spin' : ''}`}
@@ -378,7 +374,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                                     category,
                                                                 )
                                                             }
-                                                            className="border-red-200 text-red-600 hover:border-red-300 hover:bg-red-50"
+                                                            className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30"
                                                         >
                                                             <Trash className="h-4 w-4" />
                                                         </Button>
@@ -392,10 +388,10 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                         </table>
                     </div>
 
-                    {/* Footer with count */}
+                    {/* Footer */}
                     {filteredCategories.length > 0 && (
-                        <div className="border-t border-gray-200 bg-gray-50 px-5 py-3">
-                            <p className="text-xs text-gray-500">
+                        <div className="border-t border-border bg-muted/30 px-5 py-3">
+                            <p className="text-xs text-muted-foreground">
                                 Showing {filteredCategories.length} of{' '}
                                 {categories.data.length} categories
                             </p>
@@ -423,7 +419,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                         <div className="py-4">
                             <Label
                                 htmlFor="name"
-                                className="text-sm font-medium text-gray-700"
+                                className="text-sm font-medium text-foreground"
                             >
                                 Category Name
                             </Label>
@@ -434,11 +430,11 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                     setData('name', e.target.value)
                                 }
                                 placeholder="Enter category name"
-                                className={`mt-1.5 ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
+                                className={`mt-1.5 ${errors.name ? 'border-destructive' : ''}`}
                                 autoFocus
                             />
                             {errors.name && (
-                                <p className="mt-1.5 text-sm text-red-500">
+                                <p className="mt-1.5 text-sm text-destructive">
                                     {errors.name}
                                 </p>
                             )}
@@ -483,8 +479,8 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
-                                <Trash className="h-4 w-4 text-red-600" />
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10">
+                                <Trash className="h-4 w-4 text-destructive" />
                             </span>
                             Delete Category
                         </DialogTitle>
@@ -507,7 +503,6 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                             type="button"
                             variant="destructive"
                             onClick={handleDelete}
-                            className="bg-red-600 hover:bg-red-700"
                         >
                             Delete
                         </Button>
