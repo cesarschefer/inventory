@@ -11,7 +11,7 @@ use Inertia\Inertia;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of categories.
      */
     public function index()
     {
@@ -23,41 +23,32 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category in storage.
      */
-    public function store(StoreCategoryRequest $request): CategoryResource
+    public function store(StoreCategoryRequest $request)
     {
-        $category = Category::create([
+        Category::create([
             'name' => $request->input('name'),
         ]);
-
-        return (new CategoryResource($category))
-            ->additional(['message' => 'Category created successfully']);
+        return redirect(route('categories.index'));
     }
 
     /**
-     * Display the specified resource.
+     * Update the specified category in storage.
      */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCategoryRequest $request, Category $category): CategoryResource
-    {
+    public function update(
+        UpdateCategoryRequest $request,
+        Category $category
+    ) {
         $category->update([
             'name' => $request->input('name'),
         ]);
 
-        return (new CategoryResource($category))
-            ->additional(['message' => 'Category updated successfully']);
+        return redirect(route('categories.index'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category from storage.
      */
     public function destroy(string $id)
     {
@@ -70,19 +61,16 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-
-        return response()->noContent();
+        return redirect(route('categories.index'));
     }
 
     /**
-     * Restore the specified resource from deleted.
+     * Restore the specified category from deleted.
      */
     public function restore($id)
     {
         $category = Category::withTrashed()->findOrFail($id);
         $category->restore();
-
-        return (new CategoryResource($category))
-            ->additional(['message' => 'Category restored successfully']);
+        return redirect(route('categories.index'));
     }
 }
