@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
+import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -220,31 +221,13 @@ export default function CategoriesIndex({
             <Head title="Categories" />
 
             <div className="mt-3 mb-4 space-y-8 px-4 sm:px-6">
-                {/* Page Header */}
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Manage your Product Categories for inventory
-                                organization
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 dark:border-emerald-800 dark:bg-emerald-950/30">
-                                <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-                                <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                                    {counts.active} Active
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-1.5">
-                                <span className="h-2 w-2 rounded-full bg-muted-foreground"></span>
-                                <span className="text-sm font-semibold text-muted-foreground">
-                                    {counts.inactive} Inactive
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <PageHeader
+                    description="Manage your Product Categories for inventory organization"
+                    badges={[
+                        { label: 'Active', count: counts.active, variant: 'active' },
+                        { label: 'Inactive', count: counts.inactive, variant: 'inactive' },
+                    ]}
+                />
 
                 {/* Filters & Actions */}
                 <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
@@ -337,32 +320,32 @@ export default function CategoriesIndex({
                                                 </div>
                                                 <p className="font-medium text-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'No categories match your filters'
                                                         : 'No categories yet'}
                                                 </p>
                                                 <p className="text-sm text-muted-foreground">
                                                     {nameFilter ||
-                                                    categoryActiveFilter !== '3'
+                                                        categoryActiveFilter !== '3'
                                                         ? 'Try adjusting your search or filter criteria'
                                                         : 'Create your first category to get started'}
                                                 </p>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                        '3') && (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            clearSearch();
-                                                            setCategoryActiveFilter(
-                                                                '3',
-                                                            );
-                                                        }}
-                                                    >
-                                                        Clear Filters
-                                                    </Button>
-                                                )}
+                                                    '3') && (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                clearSearch();
+                                                                setCategoryActiveFilter(
+                                                                    '3',
+                                                                );
+                                                            }}
+                                                        >
+                                                            Clear Filters
+                                                        </Button>
+                                                    )}
                                             </div>
                                         </td>
                                     </tr>
