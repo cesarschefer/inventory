@@ -69,8 +69,8 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
             categoryActiveFilter === '1'
                 ? !isInactive
                 : categoryActiveFilter === '2'
-                  ? isInactive
-                  : true;
+                    ? isInactive
+                    : true;
 
         return nameMatch && statusMatch;
     });
@@ -157,14 +157,12 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
         <>
             <Head title="Categories" />
 
-            <div className="space-y-6">
+            <div className="mt-3 space-y-8 px-4 sm:px-6">
                 {/* Page Header */}
-                <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h1 className="text-2xl font-semibold text-gray-900">
-                                Categories
-                            </h1>
+
                             <p className="mt-1 text-sm text-gray-500">
                                 Manage your product categories for inventory
                                 organization
@@ -188,7 +186,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                 </div>
 
                 {/* Filters & Actions Card */}
-                <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <Button
                             onClick={openCreateModal}
@@ -241,7 +239,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                 </div>
 
                 {/* Table Card */}
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-5 shadow-md sm:p-6">
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
@@ -274,14 +272,14 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                 <div>
                                                     <p className="font-medium text-gray-900">
                                                         {nameFilter ||
-                                                        categoryActiveFilter !==
+                                                            categoryActiveFilter !==
                                                             '3'
                                                             ? 'No categories match your filters'
                                                             : 'No categories yet'}
                                                     </p>
                                                     <p className="mt-1 text-sm text-gray-500">
                                                         {nameFilter ||
-                                                        categoryActiveFilter !==
+                                                            categoryActiveFilter !==
                                                             '3'
                                                             ? 'Try adjusting your search or filter criteria'
                                                             : 'Create your first category to get started'}
@@ -289,20 +287,20 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                 </div>
                                                 {(nameFilter ||
                                                     categoryActiveFilter !==
-                                                        '3') && (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            clearSearch();
-                                                            setCategoryActiveFilter(
-                                                                '3',
-                                                            );
-                                                        }}
-                                                    >
-                                                        Clear Filters
-                                                    </Button>
-                                                )}
+                                                    '3') && (
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                clearSearch();
+                                                                setCategoryActiveFilter(
+                                                                    '3',
+                                                                );
+                                                            }}
+                                                        >
+                                                            Clear Filters
+                                                        </Button>
+                                                    )}
                                             </div>
                                         </td>
                                     </tr>
