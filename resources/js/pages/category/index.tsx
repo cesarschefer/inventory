@@ -348,7 +348,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                     {isInactive ? (
                                                         <Button
                                                             size="sm"
-                                                            variant="outline"
+                                                            variant="default"
                                                             onClick={() =>
                                                                 handleRestore(
                                                                     category.id,
@@ -358,7 +358,7 @@ export default function CategoriesIndex({ categories }: CategoriesPageProps) {
                                                                 restoringId ===
                                                                 category.id
                                                             }
-                                                            className="border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30"
+                                                            className="bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700"
                                                         >
                                                             <RefreshCw
                                                                 className={`h-4 w-4 ${restoringId === category.id ? 'animate-spin' : ''}`}
