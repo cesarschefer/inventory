@@ -6,14 +6,16 @@ use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of categories.
      */
-    public function index()
+    public function index(): Response
     {
         $search = request('search', '');
         $status = request('status', '3');
@@ -65,7 +67,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created category in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         Category::create([
             'name' => $request->input('name'),
@@ -80,7 +82,7 @@ class CategoryController extends Controller
     public function update(
         UpdateCategoryRequest $request,
         Category $category
-    ) {
+    ): RedirectResponse {
         $category->update([
             'name' => $request->input('name'),
         ]);
@@ -109,7 +111,7 @@ class CategoryController extends Controller
     /**
      * Restore the specified category from deleted.
      */
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
         $category = Category::withTrashed()->findOrFail($id);
         $category->restore();
