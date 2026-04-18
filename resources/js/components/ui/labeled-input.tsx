@@ -4,6 +4,7 @@ import { Label } from "./label";
 type LabeledInputProps = {
     label: string;
     name: string;
+    type?: string;
     value: string;
     onChange: (value: string) => void;
     error?: string;
@@ -12,6 +13,7 @@ type LabeledInputProps = {
 export default function LabeledInput({
     label,
     name,
+    type = 'text',
     value,
     onChange,
     error,
@@ -22,6 +24,7 @@ export default function LabeledInput({
 
             <Input
                 id={name}
+                type={type}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
             />

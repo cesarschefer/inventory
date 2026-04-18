@@ -20,6 +20,7 @@ import { useResourceCrud } from '@/hooks/use-resource-crud';
 import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Customer } from '@/types/customer';
+import LabeledInput from '@/components/ui/labeled-input';
 
 
 type CustomersPageProps = {
@@ -62,13 +63,46 @@ export default function CustomersIndex({
         handleDelete,
         handleRestore,
         form: { data, setData, processing, errors },
-    } = useResourceCrud<Customer, { name: string }>({
+    } = useResourceCrud<Customer, {
+        name: string;
+        email: string;
+        tax_id: string;
+        phone: string;
+        state: string;
+        city: string;
+        address: string;
+        floor: string;
+        apartment: string;
+        customer_type: string;
+    }>({
         storeUrl: CustomerController.store().url,
         updateUrl: (id) => CustomerController.update(id).url,
         destroyUrl: (id) => CustomerController.destroy(id).url,
         restoreUrl: (id) => CustomerController.restore(id).url,
-        formFields: { name: '' },
-        getEditValues: (cat) => ({ name: cat.name }),
+        formFields: {
+            name: '',
+            email: '',
+            tax_id: '',
+            phone: '',
+            state: '',
+            city: '',
+            address: '',
+            floor: '',
+            apartment: '',
+            customer_type: '',
+        },
+        getEditValues: (item) => ({
+            name: item.name,
+            email: item.email,
+            tax_id: item.tax_id ?? '',
+            phone: item.phone ?? '',
+            state: item.state ?? '',
+            city: item.city ?? '',
+            address: item.address ?? '',
+            floor: item.floor ?? '',
+            apartment: item.apartment ?? '',
+            customer_type: item.customer_type.toString(),
+        }),
         messages: {
             created: 'Customer created successfully',
             updated: 'Customer updated successfully',
@@ -82,6 +116,18 @@ export default function CustomersIndex({
             header: 'Name',
             primary: true,
             cell: (cat) => cat.name,
+        },
+        {
+            header: 'Tax ID',
+            cell: (cat) => cat.tax_id,
+        },
+        {
+            header: 'Email',
+            cell: (cat) => cat.email,
+        },
+        {
+            header: 'Customer Type',
+            cell: (cat) => cat.customer_type,
         },
         {
             header: 'Status',
@@ -216,11 +262,65 @@ export default function CustomersIndex({
                     submitLoading={processing}
                     onCancel={closeModal}
                 >
-                    <Input
+                    <Select
+                        value={data.customer_type}
+                        onValueChange={(value) => {
+                            setData('customer_type', value);
+                        }}
+                    >
+                        <SelectTrigger className="w-40">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">Customer</SelectItem>
+                            <SelectItem value="2">Company</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <LabeledInput
+                        label="Name"
+                        name="name"
                         value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(value) => setData('name', value)}
+                        error={errors.name}
                     />
-                    {errors.name && <p>{errors.name}</p>}
+                    <LabeledInput
+                        label="Email"
+                        name="email"
+                        type="email"
+                        value={data.email}
+                        onChange={(value) => setData('email', value)}
+                        error={errors.email}
+                    />
+                    <LabeledInput
+                        label="Phone"
+                        name="phone"
+                        type="tel"
+                        value={data.phone}
+                        onChange={(value) => setData('phone', value)}
+                        error={errors.phone}
+                    />
+                    <LabeledInput
+                        label="Address"
+                        name="address"
+                        value={data.address}
+                        onChange={(value) => setData('address', value)}
+                        error={errors.address}
+                    />
+                    <LabeledInput
+                        label="Floor"
+                        name="floor"
+                        value={data.floor}
+                        onChange={(value) => setData('floor', value)}
+                        error={errors.floor}
+                    />
+                    <LabeledInput
+                        label="Apartment"
+                        name="apartment"
+                        value={data.apartment}
+                        onChange={(value) => setData('apartment', value)}
+                        error={errors.apartment}
+                    />
+
                 </FormDialog>
 
                 <ConfirmDialog
@@ -234,13 +334,7 @@ export default function CustomersIndex({
             </div>
         </>
     )
-
-
-
-
-
 }
-
 
 CustomersIndex.layout = {
     breadcrumbs: [
