@@ -21,8 +21,7 @@ import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Customer } from '@/types/customer';
 import LabeledInput from '@/components/ui/labeled-input';
-import { Label } from '@/components/ui/label';
-
+import LabeledSelect from '@/components/ui/labeled-select';
 
 type CustomersPageProps = {
     customers: PaginatedResponse<Customer>;
@@ -264,23 +263,17 @@ export default function CustomersIndex({
                     onCancel={closeModal}
                 >
                     <div className="grid gap-4 py-4">
-                        <div className="space-y-1">
-                            <Label>Customer Type</Label>
-                            <Select
-                                value={data.customer_type}
-                                onValueChange={(value) => {
-                                    setData('customer_type', value);
-                                }}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">Customer</SelectItem>
-                                    <SelectItem value="2">Company</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                        <LabeledSelect
+                            label="Customer Type"
+                            name="customer_type"
+                            value={data.customer_type}
+                            onChange={(value) => setData('customer_type', value)}
+                            options={[
+                                { value: '1', label: 'Customer' },
+                                { value: '2', label: 'Company' },
+                            ]}
+                            error={errors.customer_type}
+                        />
                         <LabeledInput
                             label="Name"
                             name="name"
