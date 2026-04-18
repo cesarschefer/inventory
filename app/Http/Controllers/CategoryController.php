@@ -31,7 +31,7 @@ class CategoryController extends Controller
             $query->whereNotNull('deleted_at');
         }
 
-        $categories = $query->paginate(
+        $categories = $query->orderBy("name", "ASC")->paginate(
             perPage: 10,
             page: $page
         );
