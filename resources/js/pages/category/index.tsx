@@ -1,25 +1,14 @@
-import { Head, router, useForm } from '@inertiajs/react';
-import {
-    PenSquare,
-    Plus,
-    RefreshCw,
-    Search,
-    Trash,
-    X,
-    ChevronLeft,
-    ChevronRight,
-} from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-
+import { Head } from '@inertiajs/react';
+import { PenSquare, Plus, RefreshCw, Search, Trash, X } from 'lucide-react';
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
+import { Column, PaginatedTable } from '@/components/shared/paginated-table';
 import { FormDialog } from '@/components/shared/form-dialog';
+import { ConfirmDialog } from '@/components/shared/confirm-dialog';
 import { PageFilters } from '@/components/shared/page-filters';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -27,188 +16,118 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-
-type Category = {
-    id: number;
-    name: string;
-    deleted_at: string | null;
-    created_at: string;
-    updated_at: string;
-};
+import { useResourceCrud } from '@/hooks/use-resource-crud';
+import { useFilters } from '@/hooks/use-filters';
+import { PaginatedResponse } from '@/types/paginated-response';
+import { Category } from '@/types/category';
 
 type CategoriesPageProps = {
-    categories: {
-        data: Category[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-        from: number | null;
-        to: number | null;
-        next_page_url: string | null;
-        prev_page_url: string | null;
-    };
-    counts: {
-        active: number;
-        inactive: number;
-    };
-    filters: {
-        search: string;
-        status: string;
-    };
+    categories: PaginatedResponse<Category>;
+    counts: { active: number; inactive: number };
+    filters: { search: string; status: string };
 };
 
 export default function CategoriesIndex({
     categories,
     counts,
-    filters,
+    filters: initialFilters,
 }: CategoriesPageProps) {
-    const [nameFilter, setNameFilter] = useState(filters.search);
-    const [categoryActiveFilter, setCategoryActiveFilter] = useState<
-        '1' | '2' | '3'
-    >(filters.status as '1' | '2' | '3');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<Category | null>(
-        null,
-    );
-    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-    const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
-        null,
-    );
-    const [restoringId, setRestoringId] = useState<number | null>(null);
 
-    const currentPage = categories.current_page;
-    const lastPage = categories.last_page;
+    const {
+        filters,
+        updateFilter,
+        applyFilters,
+        clearFilters,
+        handlePageChange,
+        hasActiveFilters,
+        navigate,
+    } = useFilters({
+        initialFilters,
+        defaultFilters: { search: '', status: '3' },
+        buildUrl: (params) => categoriesIndex({ query: params }).url,
+    });
 
-    const handlePageChange = (page: number) => {
-        router.get(
-            categoriesIndex({
-                query: {
-                    page,
-                    search: nameFilter,
-                    status: categoryActiveFilter,
-                },
-            }).url,
-            {},
-            { replace: true },
-        );
-    };
+    const {
+        isModalOpen,
+        setIsModalOpen,
+        editingItem: editingCategory,
+        deleteConfirmOpen,
+        setDeleteConfirmOpen,
+        itemToDelete: categoryToDelete,
+        restoringId,
+        openCreateModal,
+        openEditModal,
+        closeModal,
+        handleSubmit,
+        confirmDelete,
+        handleDelete,
+        handleRestore,
+        form: { data, setData, processing, errors },
+    } = useResourceCrud<Category, { name: string }>({
+        storeUrl: CategoryController.store().url,
+        updateUrl: (id) => CategoryController.update(id).url,
+        destroyUrl: (id) => CategoryController.destroy(id).url,
+        restoreUrl: (id) => CategoryController.restore(id).url,
+        formFields: { name: '' },
+        getEditValues: (cat) => ({ name: cat.name }),
+        messages: {
+            created: 'Category created successfully',
+            updated: 'Category updated successfully',
+            deleted: 'Category deleted successfully',
+            restored: 'Category restored successfully',
+        },
+    });
 
-    const { data, setData, post, put, processing, errors, reset, clearErrors } =
-        useForm({
-            name: '',
-        });
-
-    const handleSearch = () => {
-        router.get(
-            categoriesIndex({
-                query: {
-                    page: 1,
-                    search: nameFilter,
-                    status: categoryActiveFilter,
-                },
-            }).url,
-            {},
-            { replace: true },
-        );
-    };
-
-    const handleStatusChange = (value: string) => {
-        setCategoryActiveFilter(value as '1' | '2' | '3');
-        router.get(
-            categoriesIndex({
-                query: { page: 1, search: nameFilter, status: value },
-            }).url,
-            {},
-            { replace: true },
-        );
-    };
-
-    const clearSearch = () => {
-        setNameFilter('');
-        setCategoryActiveFilter('3');
-        router.get(
-            categoriesIndex({
-                query: { page: 1, search: '', status: '3' },
-            }).url,
-            {},
-            { replace: true },
-        );
-    };
-
-    const openCreateModal = () => {
-        reset();
-        clearErrors();
-        setEditingCategory(null);
-        setIsModalOpen(true);
-    };
-
-    const openEditModal = (category: Category) => {
-        setData('name', category.name);
-        clearErrors();
-        setEditingCategory(category);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setEditingCategory(null);
-        reset();
-        clearErrors();
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (editingCategory) {
-            put(CategoryController.update(editingCategory.id).url, {
-                onSuccess: () => {
-                    closeModal();
-                    toast.success('Category updated successfully');
-                },
-            });
-        } else {
-            post(CategoryController.store().url, {
-                onSuccess: () => {
-                    closeModal();
-                    toast.success('Category created successfully');
-                },
-            });
-        }
-    };
-
-    const confirmDelete = (category: Category) => {
-        setCategoryToDelete(category);
-        setDeleteConfirmOpen(true);
-    };
-
-    const handleDelete = () => {
-        if (!categoryToDelete) {
-            return;
-        }
-
-        router.delete(CategoryController.destroy(categoryToDelete.id).url, {
-            onSuccess: () => {
-                setDeleteConfirmOpen(false);
-                setCategoryToDelete(null);
-                toast.success('Category deleted successfully');
-            },
-        });
-    };
-
-    const handleRestore = (id: number) => {
-        setRestoringId(id);
-        router.post(
-            CategoryController.restore(id).url,
-            {},
-            {
-                onSuccess: () => {
-                    setRestoringId(null);
-                    toast.success('Category restored successfully');
-                },
-            },
-        );
-    };
+    const columns: Column<Category>[] = [
+        {
+            header: 'Name',
+            primary: true,
+            cell: (cat) => cat.name,
+        },
+        {
+            header: 'Status',
+            align: 'center',
+            cell: (cat) =>
+                cat.deleted_at ? 'Inactive' : 'Active',
+        },
+        {
+            header: 'Edit',
+            align: 'center',
+            cell: (cat) => (
+                <Button
+                    size="sm"
+                    className='cursor-pointer'
+                    variant="outline"
+                    onClick={() => openEditModal(cat)}
+                >
+                    <PenSquare className="h-4 w-4" />
+                </Button>
+            ),
+        },
+        {
+            header: 'Actions',
+            align: 'center',
+            cell: (cat) =>
+                cat.deleted_at ? (
+                    <Button
+                        size="sm"
+                        className='cursor-pointer'
+                        onClick={() => handleRestore(cat.id)}
+                    >
+                        <RefreshCw className="h-4 w-4" />
+                    </Button>
+                ) : (
+                    <Button
+                        size="sm"
+                        className='cursor-pointer'
+                        variant="destructive"
+                        onClick={() => confirmDelete(cat)}
+                    >
+                        <Trash className="h-4 w-4" />
+                    </Button>
+                ),
+        },
+    ];
 
     return (
         <>
@@ -216,7 +135,7 @@ export default function CategoriesIndex({
 
             <div className="mt-3 mb-4 space-y-8 px-4 sm:px-6">
                 <PageHeader
-                    description="Manage your Product Categories for inventory organization"
+                    description="Manage your Product Categories"
                     badges={[
                         {
                             label: 'Active',
@@ -238,35 +157,23 @@ export default function CategoriesIndex({
                         icon: <Plus className="h-4 w-4" />,
                     }}
                     filters={
-                        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-                            <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search categories..."
-                                    value={nameFilter}
-                                    onChange={(e) =>
-                                        setNameFilter(e.target.value)
-                                    }
-                                    onBlur={handleSearch}
-                                    className="pr-8 pl-9 sm:w-56"
-                                />
-                                {nameFilter && (
-                                    <button
-                                        onClick={() => {
-                                            setNameFilter('');
-                                            handleSearch();
-                                        }}
-                                        className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                                    >
-                                        <X className="h-3.5 w-3.5" />
-                                    </button>
-                                )}
-                            </div>
+                        <div className="flex gap-3">
+                            <Input
+                                placeholder="Search..."
+                                value={filters.search}
+                                onChange={(e) =>
+                                    updateFilter('search', e.target.value)
+                                }
+                                onBlur={applyFilters}
+                            />
                             <Select
-                                value={categoryActiveFilter}
-                                onValueChange={handleStatusChange}
+                                value={filters.status}
+                                onValueChange={(value) => {
+                                    updateFilter('status', value);
+                                    navigate(1, { status: value });
+                                }}
                             >
-                                <SelectTrigger className="sm:w-40">
+                                <SelectTrigger className="w-40">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -275,289 +182,56 @@ export default function CategoriesIndex({
                                     <SelectItem value="3">All</SelectItem>
                                 </SelectContent>
                             </Select>
+
+                            {hasActiveFilters && (
+                                <Button
+                                    variant="primary"
+                                    className='cursor-pointer'
+                                    onClick={clearFilters}
+                                >
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            )}
                         </div>
                     }
                 />
 
-                {/* Table */}
-                <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="bg-muted/50">
-                                <tr>
-                                    <th className="px-5 py-3.5 text-left text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                                        Name
-                                    </th>
-                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                                        Status
-                                    </th>
-                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                                        Edit
-                                    </th>
-                                    <th className="px-5 py-3.5 text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-border">
-                                {categories.data.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={4}
-                                            className="px-5 py-16 text-center"
-                                        >
-                                            <div className="flex flex-col items-center gap-3">
-                                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted">
-                                                    <Search className="h-7 w-7 text-muted-foreground/50" />
-                                                </div>
-                                                <p className="font-medium text-foreground">
-                                                    {nameFilter ||
-                                                        categoryActiveFilter !== '3'
-                                                        ? 'No categories match your filters'
-                                                        : 'No categories yet'}
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {nameFilter ||
-                                                        categoryActiveFilter !== '3'
-                                                        ? 'Try adjusting your search or filter criteria'
-                                                        : 'Create your first category to get started'}
-                                                </p>
-                                                {(nameFilter ||
-                                                    categoryActiveFilter !==
-                                                    '3') && (
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => {
-                                                                clearSearch();
-                                                                setCategoryActiveFilter(
-                                                                    '3',
-                                                                );
-                                                            }}
-                                                        >
-                                                            Clear Filters
-                                                        </Button>
-                                                    )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    categories.data.map(
-                                        (category: Category) => {
-                                            const isInactive =
-                                                category.deleted_at !== null;
-
-                                            return (
-                                                <tr
-                                                    key={category.id}
-                                                    className="transition-colors hover:bg-muted/30"
-                                                >
-                                                    <td className="px-5 py-4 font-medium text-foreground">
-                                                        {category.name}
-                                                    </td>
-                                                    <td className="px-5 py-4 text-center">
-                                                        {isInactive ? (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400">
-                                                                <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-                                                                Inactive
-                                                            </span>
-                                                        ) : (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
-                                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                                                Active
-                                                            </span>
-                                                        )}
-                                                    </td>
-                                                    <td className="px-5 py-4 text-center">
-                                                        <Button
-                                                            size="sm"
-                                                            variant="outline"
-                                                            onClick={() =>
-                                                                openEditModal(
-                                                                    category,
-                                                                )
-                                                            }
-                                                            disabled={
-                                                                isInactive
-                                                            }
-                                                            className={
-                                                                isInactive
-                                                                    ? 'cursor-not-allowed opacity-50'
-                                                                    : 'cursor-pointer'
-                                                            }
-                                                        >
-                                                            <PenSquare className="h-4 w-4" />
-                                                        </Button>
-                                                    </td>
-                                                    <td className="px-5 py-4 text-center">
-                                                        {isInactive ? (
-                                                            <Button
-                                                                size="sm"
-                                                                variant="default"
-                                                                onClick={() =>
-                                                                    handleRestore(
-                                                                        category.id,
-                                                                    )
-                                                                }
-                                                                disabled={
-                                                                    restoringId ===
-                                                                    category.id
-                                                                }
-                                                                className={`bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 ${restoringId === category.id ? '' : 'cursor-pointer'}`}
-                                                            >
-                                                                <RefreshCw
-                                                                    className={`h-4 w-4 ${restoringId === category.id ? 'animate-spin' : ''}`}
-                                                                />
-                                                            </Button>
-                                                        ) : (
-                                                            <Button
-                                                                size="sm"
-                                                                variant="default"
-                                                                onClick={() =>
-                                                                    confirmDelete(
-                                                                        category,
-                                                                    )
-                                                                }
-                                                                className="cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
-                                                            >
-                                                                <Trash className="h-4 w-4" />
-                                                            </Button>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        },
-                                    )
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Footer */}
-                    {categories.data.length > 0 && (
-                        <div className="border-t border-border bg-muted/30 px-5 py-3">
-                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                                <p className="text-xs text-muted-foreground">
-                                    Showing {categories.from} to {categories.to}{' '}
-                                    of {categories.total} categories
-                                </p>
-                                {lastPage > 1 && (
-                                    <div className="flex items-center gap-1">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                handlePageChange(
-                                                    currentPage - 1,
-                                                )
-                                            }
-                                            disabled={!categories.prev_page_url}
-                                            className="h-8 w-8 p-0"
-                                        >
-                                            <ChevronLeft className="h-4 w-4" />
-                                        </Button>
-                                        <span className="px-2 text-xs text-muted-foreground">
-                                            Page {currentPage} of {lastPage}
-                                        </span>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                handlePageChange(
-                                                    currentPage + 1,
-                                                )
-                                            }
-                                            disabled={!categories.next_page_url}
-                                            className="h-8 w-8 p-0"
-                                        >
-                                            <ChevronRight className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <PaginatedTable
+                    data={categories}
+                    columns={columns}
+                    entityLabel="categories"
+                    hasActiveFilters={hasActiveFilters}
+                    onClearFilters={clearFilters}
+                    onPageChange={handlePageChange}
+                />
             </div>
 
-            {/* Create/Edit Modal */}
             <FormDialog
                 open={isModalOpen}
                 onOpenChange={setIsModalOpen}
                 title={
-                    editingCategory ? 'Edit Category' : 'Create New Category'
-                }
-                description={
-                    editingCategory
-                        ? 'Update the category name below.'
-                        : 'Add a new category to organize your inventory.'
+                    editingCategory ? 'Edit Category' : 'Create Category'
                 }
                 onSubmit={handleSubmit}
-                actions={[
-                    {
-                        label: 'Cancel',
-                        variant: 'outline',
-                        onClick: closeModal,
-                        disabled: processing,
-                    },
-                    {
-                        label: editingCategory
-                            ? 'Save Changes'
-                            : 'Create Category',
-                        variant: 'primary',
-                        type: 'submit',
-                        loading: processing,
-                        loadingLabel: editingCategory
-                            ? 'Updating...'
-                            : 'Creating...',
-                    },
-                ]}
+                submitLabel="Save"
+                submitLoading={processing}
+                onCancel={closeModal}
             >
-                <Label
-                    htmlFor="name"
-                    className="text-sm font-medium text-foreground"
-                >
-                    Category Name
-                </Label>
                 <Input
-                    id="name"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
-                    placeholder="Enter category name"
-                    className={`mt-1.5 ${errors.name ? 'border-destructive' : ''}`}
-                    autoFocus
                 />
-                {errors.name && (
-                    <p className="mt-1.5 text-sm text-destructive">
-                        {errors.name}
-                    </p>
-                )}
+                {errors.name && <p>{errors.name}</p>}
             </FormDialog>
 
-            {/* Delete Confirmation Dialog */}
-            <FormDialog
+            <ConfirmDialog
                 open={deleteConfirmOpen}
                 onOpenChange={setDeleteConfirmOpen}
                 title="Delete Category"
-                description={`Are you sure you want to delete "${categoryToDelete?.name}"? This action can be undone by restoring the category from the inactive list.`}
-                icon={<Trash className="h-4 w-4 text-destructive" />}
-                actions={[
-                    {
-                        label: 'Cancel',
-                        variant: 'outline',
-                        onClick: () => setDeleteConfirmOpen(false),
-                    },
-                    {
-                        label: 'Delete',
-                        variant: 'destructive',
-                        onClick: handleDelete,
-                    },
-                ]}
+                description={`Delete "${categoryToDelete?.name}"?`}
+                onConfirm={handleDelete}
+                onCancel={() => setDeleteConfirmOpen(false)}
             />
         </>
     );
 }
-
-CategoriesIndex.layout = {
-    breadcrumbs: [{ title: 'Categories', href: CategoryController.index() }],
-};

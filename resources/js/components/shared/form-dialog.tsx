@@ -1,5 +1,4 @@
 import { ReactNode, FormEvent } from 'react';
-
 import {
     Dialog,
     DialogContent,
@@ -11,44 +10,49 @@ import {
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 
-type DialogAction = {
-    label: string;
-    onClick?: () => void;
-    type?: 'button' | 'submit';
-    variant?:
-        | 'default'
-        | 'primary'
-        | 'destructive'
-        | 'outline'
-        | 'ghost'
-        | 'link'
-        | 'secondary';
-    disabled?: boolean;
-    loading?: boolean;
-    loadingLabel?: string;
-    icon?: ReactNode;
-};
-
 type FormDialogProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    submitVariant?:
+    | 'default'
+    | 'primary'
+    | 'destructive'
+    | 'outline'
+    | 'ghost'
+    | 'link'
+    | 'secondary';
     title: string;
     description?: string;
     icon?: ReactNode;
-    children?: ReactNode;
-    actions: DialogAction[];
-    onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+
+    children: ReactNode;
+
+    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+
+    submitLabel?: string;
+    submitLoading?: boolean;
+    submitLoadingLabel?: string;
+
+    cancelLabel?: string;
+    onCancel?: () => void;
+    disableCancel?: boolean;
 };
 
 export function FormDialog({
     open,
     onOpenChange,
+    submitVariant = 'primary',
     title,
     description,
     icon,
     children,
-    actions,
     onSubmit,
+    submitLabel = 'Save',
+    submitLoading = false,
+    submitLoadingLabel,
+    cancelLabel = 'Cancel',
+    onCancel,
+    disableCancel = false,
 }: FormDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -58,7 +62,7 @@ export function FormDialog({
                         className={icon ? 'flex items-center gap-2' : undefined}
                     >
                         {icon && (
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
                                 {icon}
                             </span>
                         )}
@@ -68,65 +72,38 @@ export function FormDialog({
                         <DialogDescription>{description}</DialogDescription>
                     )}
                 </DialogHeader>
-                {onSubmit ? (
-                    <form onSubmit={onSubmit}>
-                        {children && <div className="py-4">{children}</div>}
-                        <DialogFooter className="gap-2 sm:justify-end">
-                            {actions.map((action, i) => (
-                                <Button
-                                    key={i}
-                                    type={action.type ?? 'button'}
-                                    variant={action.variant ?? 'default'}
-                                    onClick={action.onClick}
-                                    disabled={action.disabled || action.loading}
-                                    className="cursor-pointer"
-                                >
-                                    {action.loading ? (
-                                        <span className="flex items-center gap-2">
-                                            <RefreshCw className="h-4 w-4 animate-spin" />
-                                            {action.loadingLabel ??
-                                                action.label}
-                                        </span>
-                                    ) : (
-                                        <>
-                                            {action.icon}
-                                            {action.label}
-                                        </>
-                                    )}
-                                </Button>
-                            ))}
-                        </DialogFooter>
-                    </form>
-                ) : (
-                    <>
-                        {children && <div className="py-4">{children}</div>}
-                        <DialogFooter className="gap-2 sm:justify-end">
-                            {actions.map((action, i) => (
-                                <Button
-                                    key={i}
-                                    type={action.type ?? 'button'}
-                                    variant={action.variant ?? 'default'}
-                                    onClick={action.onClick}
-                                    disabled={action.disabled || action.loading}
-                                    className="cursor-pointer"
-                                >
-                                    {action.loading ? (
-                                        <span className="flex items-center gap-2">
-                                            <RefreshCw className="h-4 w-4 animate-spin" />
-                                            {action.loadingLabel ??
-                                                action.label}
-                                        </span>
-                                    ) : (
-                                        <>
-                                            {action.icon}
-                                            {action.label}
-                                        </>
-                                    )}
-                                </Button>
-                            ))}
-                        </DialogFooter>
-                    </>
-                )}
+
+                <form onSubmit={onSubmit}>
+                    <div className="py-4">{children}</div>
+
+                    <DialogFooter className="gap-2 sm:justify-end">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className='cursor-pointer'
+                            onClick={onCancel}
+                            disabled={disableCancel || submitLoading}
+                        >
+                            {cancelLabel}
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            variant={submitVariant ?? 'primary'}
+                            disabled={submitLoading}
+                            className='cursor-pointer'
+                        >
+                            {submitLoading ? (
+                                <span className="flex items-center gap-2">
+                                    <RefreshCw className="h-4 w-4 animate-spin" />
+                                    {submitLoadingLabel ?? submitLabel}
+                                </span>
+                            ) : (
+                                submitLabel
+                            )}
+                        </Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );
