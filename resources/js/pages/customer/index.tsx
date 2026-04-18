@@ -21,6 +21,7 @@ import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Customer } from '@/types/customer';
 import LabeledInput from '@/components/ui/labeled-input';
+import { Label } from '@/components/ui/label';
 
 
 type CustomersPageProps = {
@@ -89,7 +90,7 @@ export default function CustomersIndex({
             address: '',
             floor: '',
             apartment: '',
-            customer_type: '',
+            customer_type: '1',
         },
         getEditValues: (item) => ({
             name: item.name,
@@ -262,65 +263,69 @@ export default function CustomersIndex({
                     submitLoading={processing}
                     onCancel={closeModal}
                 >
-                    <Select
-                        value={data.customer_type}
-                        onValueChange={(value) => {
-                            setData('customer_type', value);
-                        }}
-                    >
-                        <SelectTrigger className="w-40">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="1">Customer</SelectItem>
-                            <SelectItem value="2">Company</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <LabeledInput
-                        label="Name"
-                        name="name"
-                        value={data.name}
-                        onChange={(value) => setData('name', value)}
-                        error={errors.name}
-                    />
-                    <LabeledInput
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={data.email}
-                        onChange={(value) => setData('email', value)}
-                        error={errors.email}
-                    />
-                    <LabeledInput
-                        label="Phone"
-                        name="phone"
-                        type="tel"
-                        value={data.phone}
-                        onChange={(value) => setData('phone', value)}
-                        error={errors.phone}
-                    />
-                    <LabeledInput
-                        label="Address"
-                        name="address"
-                        value={data.address}
-                        onChange={(value) => setData('address', value)}
-                        error={errors.address}
-                    />
-                    <LabeledInput
-                        label="Floor"
-                        name="floor"
-                        value={data.floor}
-                        onChange={(value) => setData('floor', value)}
-                        error={errors.floor}
-                    />
-                    <LabeledInput
-                        label="Apartment"
-                        name="apartment"
-                        value={data.apartment}
-                        onChange={(value) => setData('apartment', value)}
-                        error={errors.apartment}
-                    />
-
+                    <div className="grid gap-4 py-4">
+                        <div className="space-y-1">
+                            <Label>Customer Type</Label>
+                            <Select
+                                value={data.customer_type}
+                                onValueChange={(value) => {
+                                    setData('customer_type', value);
+                                }}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="1">Customer</SelectItem>
+                                    <SelectItem value="2">Company</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <LabeledInput
+                            label="Name"
+                            name="name"
+                            value={data.name}
+                            onChange={(value) => setData('name', value)}
+                            error={errors.name}
+                        />
+                        <LabeledInput
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={data.email}
+                            onChange={(value) => setData('email', value)}
+                            error={errors.email}
+                        />
+                        <LabeledInput
+                            label="Phone"
+                            name="phone"
+                            type="tel"
+                            value={data.phone}
+                            onChange={(value) => setData('phone', value)}
+                            error={errors.phone}
+                        />
+                        <LabeledInput
+                            label="Address"
+                            name="address"
+                            value={data.address}
+                            onChange={(value) => setData('address', value)}
+                            error={errors.address}
+                        />
+                        <LabeledInput
+                            label="Floor"
+                            name="floor"
+                            value={data.floor}
+                            onChange={(value) => setData('floor', value)}
+                            error={errors.floor}
+                        />
+                        <LabeledInput
+                            label="Apartment"
+                            name="apartment"
+                            value={data.apartment}
+                            onChange={(value) => setData('apartment', value)}
+                            error={errors.apartment}
+                        />
+                    </div>
                 </FormDialog>
 
                 <ConfirmDialog
