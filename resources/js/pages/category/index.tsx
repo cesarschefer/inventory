@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { PenSquare, Plus, RefreshCw, Search, Trash, X } from 'lucide-react';
+import { PenSquare, Plus, RefreshCw, Trash, X } from 'lucide-react';
 import CategoryController from '@/actions/App/Http/Controllers/CategoryController';
 import { index as categoriesIndex } from '@/routes/categories';
 import { Column, PaginatedTable } from '@/components/shared/paginated-table';
@@ -20,7 +20,7 @@ import { useResourceCrud } from '@/hooks/use-resource-crud';
 import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Category } from '@/types/category';
-import { Label } from '@/components/ui/label';
+import LabeledInput from '@/components/ui/labeled-input';
 
 type CategoriesPageProps = {
     categories: PaginatedResponse<Category>;
@@ -217,16 +217,13 @@ export default function CategoriesIndex({
                 submitLoading={processing}
                 onCancel={closeModal}
             >
-                <Label
-                    htmlFor="name"
-                >
-                    Name
-                </Label>
-                <Input
+                <LabeledInput
+                    label="Name"
+                    name="name"
                     value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
+                    onChange={(value) => setData('name', value)}
+                    error={errors.name}
                 />
-                {errors.name && <p>{errors.name}</p>}
             </FormDialog>
 
             <ConfirmDialog
