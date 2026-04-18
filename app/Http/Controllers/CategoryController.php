@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         $search = request('search', '');
-        $status = request('status', '1');
+        $status = request('status', '3');
         $page = request('page', 1);
 
         $query = Category::withTrashed();

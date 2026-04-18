@@ -68,8 +68,12 @@ export function FormDialog({
                         )}
                         {title}
                     </DialogTitle>
-                    {description && (
+                    {description ? (
                         <DialogDescription>{description}</DialogDescription>
+                    ) : (
+                        <DialogDescription className="sr-only">
+                            {title}
+                        </DialogDescription>
                     )}
                 </DialogHeader>
 

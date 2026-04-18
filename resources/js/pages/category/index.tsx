@@ -54,7 +54,6 @@ export default function CategoriesIndex({
         deleteConfirmOpen,
         setDeleteConfirmOpen,
         itemToDelete: categoryToDelete,
-        restoringId,
         openCreateModal,
         openEditModal,
         closeModal,
@@ -93,7 +92,7 @@ export default function CategoriesIndex({
         {
             header: 'Edit',
             align: 'center',
-            cell: (cat) => (
+            cell: (cat) => !cat.deleted_at ? (
                 <Button
                     size="sm"
                     className='cursor-pointer'
@@ -102,7 +101,7 @@ export default function CategoriesIndex({
                 >
                     <PenSquare className="h-4 w-4" />
                 </Button>
-            ),
+            ) : null,
         },
         {
             header: 'Actions',
