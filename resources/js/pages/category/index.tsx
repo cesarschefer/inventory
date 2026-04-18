@@ -20,6 +20,7 @@ import { useResourceCrud } from '@/hooks/use-resource-crud';
 import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Category } from '@/types/category';
+import { Label } from '@/components/ui/label';
 
 type CategoriesPageProps = {
     categories: PaginatedResponse<Category>;
@@ -216,6 +217,11 @@ export default function CategoriesIndex({
                 submitLoading={processing}
                 onCancel={closeModal}
             >
+                <Label
+                    htmlFor="name"
+                >
+                    Name
+                </Label>
                 <Input
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
