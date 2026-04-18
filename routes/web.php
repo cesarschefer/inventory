@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -14,6 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::post('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+
+    Route::resource('customers', CustomerController::class)->except(['show']);
+    Route::post('customers/{id}/restore', [CustomerController::class, 'restore'])->name('customers.restore');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

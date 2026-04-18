@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
+import customers from '@/routes/customers';
 import type { NavItem } from '@/types';
 
 export const mainNavItems: NavItem[] = [
@@ -33,7 +34,7 @@ export const mainNavItems: NavItem[] = [
     },
     {
         title: 'Customers',
-        href: dashboard(),
+        href: customers.index(),
         icon: BriefcaseIcon,
     },
     {
