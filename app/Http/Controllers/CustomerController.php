@@ -20,6 +20,7 @@ class CustomerController extends Controller
     {
         $search = request('search', '');
         $status = request('status', '3');
+        $customer_type = request('customer_type', '3');
         $page = request('page', 1);
 
         $query = Customer::withTrashed();
@@ -32,6 +33,12 @@ class CustomerController extends Controller
             $query->whereNull('deleted_at');
         } elseif ($status === '2') {
             $query->whereNotNull('deleted_at');
+        }
+
+        if ($customer_type === '1') {
+            $query->where('customer_type', 1);
+        } elseif ($customer_type === '2') {
+            $query->where('customer_type', 2);
         }
 
         $customers = $query->orderBy("name", "ASC")->paginate(
@@ -61,6 +68,7 @@ class CustomerController extends Controller
             'filters' => [
                 'search' => $search,
                 'status' => $status,
+                'customer_type' => $customer_type,
             ],
         ]);
     }

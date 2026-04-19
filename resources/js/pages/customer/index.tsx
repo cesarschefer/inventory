@@ -30,7 +30,7 @@ import cities from '../../../utils/cities.json';
 type CustomersPageProps = {
     customers: PaginatedResponse<Customer>;
     counts: { active: number; inactive: number };
-    filters: { search: string; status: string };
+    filters: { search: string; status: string; customer_type: string };
 };
 
 export default function CustomersIndex({
@@ -48,7 +48,7 @@ export default function CustomersIndex({
         navigate,
     } = useFilters({
         initialFilters,
-        defaultFilters: { search: '', status: '3' },
+        defaultFilters: { search: '', status: '3', customer_type: '3' },
         buildUrl: (params) => customersIndex({ query: params }).url,
     });
 
@@ -249,6 +249,23 @@ export default function CustomersIndex({
                                 <SelectContent>
                                     <SelectItem value="1">Active</SelectItem>
                                     <SelectItem value="2">Inactive</SelectItem>
+                                    <SelectItem value="3">All</SelectItem>
+                                </SelectContent>
+                            </Select>
+
+                            <Select
+                                value={filters.customer_type}
+                                onValueChange={(value) => {
+                                    updateFilter('customer_type', value);
+                                    navigate(1, { customer_type: value });
+                                }}
+                            >
+                                <SelectTrigger className="w-40">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="1">Customer</SelectItem>
+                                    <SelectItem value="2">Company</SelectItem>
                                     <SelectItem value="3">All</SelectItem>
                                 </SelectContent>
                             </Select>
