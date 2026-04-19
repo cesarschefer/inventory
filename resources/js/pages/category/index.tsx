@@ -9,12 +9,12 @@ import { PageFilters } from '@/components/shared/page-filters';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { CategoryFilters } from '@/components/category/category-filters';
+import { CategoryInputs } from '@/components/category/category-inputs';
 
 import { useResourceCrud } from '@/hooks/use-resource-crud';
 import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
 import { Category } from '@/types/category';
-import LabeledInput from '@/components/ui/labeled-input';
 
 type CategoriesPageProps = {
     categories: PaginatedResponse<Category>;
@@ -183,13 +183,7 @@ export default function CategoriesIndex({
                 submitLoading={processing}
                 onCancel={closeModal}
             >
-                <LabeledInput
-                    label="Name"
-                    name="name"
-                    value={data.name}
-                    onChange={(value) => setData('name', value)}
-                    error={errors.name}
-                />
+                <CategoryInputs data={data} setData={setData} errors={errors} />
             </FormDialog>
 
             <ConfirmDialog
