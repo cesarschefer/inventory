@@ -21,12 +21,17 @@ class CustomerController extends Controller
         $search = request('search', '');
         $status = request('status', '3');
         $customer_type = request('customer_type', '3');
+        $tax_id = request('tax_id', '');
         $page = request('page', 1);
 
         $query = Customer::withTrashed();
 
         if ($search) {
             $query->where('name', 'like', "%{$search}%");
+        }
+
+        if ($tax_id) {
+            $query->where('tax_id', 'like', "{$tax_id}%");
         }
 
         if ($status === '1') {
@@ -69,6 +74,7 @@ class CustomerController extends Controller
                 'search' => $search,
                 'status' => $status,
                 'customer_type' => $customer_type,
+                'tax_id' => $tax_id,
             ],
         ]);
     }

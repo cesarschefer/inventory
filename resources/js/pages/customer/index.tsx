@@ -31,7 +31,7 @@ import cities from '../../../utils/cities.json';
 type CustomersPageProps = {
     customers: PaginatedResponse<Customer>;
     counts: { active: number; inactive: number };
-    filters: { search: string; status: string; customer_type: string };
+    filters: { search: string; status: string; customer_type: string; tax_id: string };
 };
 
 export default function CustomersIndex({
@@ -49,7 +49,7 @@ export default function CustomersIndex({
         navigate,
     } = useFilters({
         initialFilters,
-        defaultFilters: { search: '', status: '3', customer_type: '3' },
+        defaultFilters: { search: '', status: '3', customer_type: '3', tax_id: '' },
         buildUrl: (params) => customersIndex({ query: params }).url,
     });
 
@@ -279,6 +279,18 @@ export default function CustomersIndex({
                                         <SelectItem value="3">All</SelectItem>
                                     </SelectContent>
                                 </Select>
+                            </div>
+
+                            <div className="flex-1 min-w-[200px]">
+                                <Label className="mb-1.5 block px-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">Tax ID</Label>
+                                <Input
+                                    placeholder="Search by tax ID..."
+                                    value={filters.tax_id}
+                                    onChange={(e) =>
+                                        updateFilter('tax_id', e.target.value)
+                                    }
+                                    onBlur={applyFilters}
+                                />
                             </div>
 
                             {hasActiveFilters && (
