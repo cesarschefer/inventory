@@ -22,25 +22,28 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'customer_type' => 'required|integer|in:1,2',
             'name' => 'required|string|max:100',
-            'tax_id' => 'required|string|max:30|unique:suppliers,tax_id',
             'email' => 'required|email|unique:customers,email',
+            'tax_id' => 'nullable|required_if:customer_type,2|string|max:30|unique:customers,tax_id',
             'phone' => 'nullable|string|max:30',
             'state' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:100',
             'address' => 'nullable|string|max:100',
             'floor' => 'nullable|string|max:10',
             'apartment' => 'nullable|string|max:10',
-            'customer_type' => 'required|integer|in:1,2',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Supplier name is required.',
-            'name.string' => 'Supplier name must be a string.',
-            'name.max' => 'Supplier name cannot be longer than 100 characters.',
+            'customer_type.required' => 'Customer type is required.',
+            'customer_type.integer' => 'Customer type must be an integer.',
+            'customer_type.in' => 'Customer type must be 1 or 2.',
+            'name.required' => 'Customer name is required.',
+            'name.string' => 'Customer name must be a string.',
+            'name.max' => 'Customer name cannot be longer than 100 characters.',
             'email.required' => 'Email is required.',
             'email.email' => 'Email must be a valid email address.',
             'email.unique' => 'This email is already taken.',

@@ -25,6 +25,7 @@ class UpdateCustomerRequest extends FormRequest
         $customerId = $this->route('customer')->id ?? null;
 
         return [
+            'customer_type' => 'required|integer|in:1,2',
             'name' => 'required|string|max:100',
             'tax_id' => 'nullable|required_if:customer_type,2|string|max:30|unique:customers,tax_id,' . $customerId,
             'email' => [
@@ -38,13 +39,15 @@ class UpdateCustomerRequest extends FormRequest
             'address' => 'nullable|string|max:100',
             'floor' => 'nullable|string|max:10',
             'apartment' => 'nullable|string|max:10',
-            'customer_type' => 'required|integer|in:1,2',
         ];
     }
 
     public function messages(): array
     {
         return [
+            'customer_type.required' => 'Customer type is required.',
+            'customer_type.integer' => 'Customer type must be an integer.',
+            'customer_type.in' => 'Customer type must be 1 or 2.',
             'name.required' => 'Customer name is required.',
             'name.string' => 'Customer name must be a string.',
             'name.max' => 'Customer name cannot be longer than 100 characters.',
