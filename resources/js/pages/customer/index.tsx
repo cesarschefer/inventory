@@ -114,7 +114,7 @@ export default function CustomersIndex({
             restored: 'Customer restored successfully',
         },
     });
-    
+
     const filteredCities = useMemo(() => {
         if (!data.state) return [];
         return cities.filter((c) => c.code === data.state);
@@ -293,6 +293,7 @@ export default function CustomersIndex({
                                 label="Customer Type"
                                 name="customer_type"
                                 value={data.customer_type}
+                                disabled={!!editingCustomer}
                                 onChange={(value) => {
                                     setData((prev) => ({
                                         ...prev,
@@ -341,36 +342,36 @@ export default function CustomersIndex({
                         </div>
 
                         <div className="space-y-4">
-                                <LabeledSelect
-                                    label="State"
-                                    name="state"
-                                    value={data.state}
-                                    onChange={(value) => {
-                                        setData((prev) => ({
-                                            ...prev,
-                                            state: value,
-                                            city: '',
-                                        }));
-                                    }}
-                                    options={states.map((s) => ({
-                                        value: s.code,
-                                        label: s.name,
-                                    }))}
-                                    error={errors.state}
-                                />
-                                <LabeledSelect
-                                    label="City"
-                                    name="city"
-                                    value={data.city}
-                                    onChange={(value) => setData('city', value)}
-                                    options={filteredCities.map((c) => ({
-                                        value: c.name,
-                                        label: c.name,
-                                    }))}
-                                    error={errors.city}
-                                    disabled={!data.state}
-                                    placeholder={!data.state ? "Select state" : "Select city"}
-                                />
+                            <LabeledSelect
+                                label="State"
+                                name="state"
+                                value={data.state}
+                                onChange={(value) => {
+                                    setData((prev) => ({
+                                        ...prev,
+                                        state: value,
+                                        city: '',
+                                    }));
+                                }}
+                                options={states.map((s) => ({
+                                    value: s.code,
+                                    label: s.name,
+                                }))}
+                                error={errors.state}
+                            />
+                            <LabeledSelect
+                                label="City"
+                                name="city"
+                                value={data.city}
+                                onChange={(value) => setData('city', value)}
+                                options={filteredCities.map((c) => ({
+                                    value: c.name,
+                                    label: c.name,
+                                }))}
+                                error={errors.city}
+                                disabled={!data.state}
+                                placeholder={!data.state ? "Select state" : "Select city"}
+                            />
 
                             <LabeledInput
                                 label="Address"
