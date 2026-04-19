@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import { useMemo } from 'react';
 import { PenSquare, Plus, RefreshCw, Search, Trash, X } from 'lucide-react';
 import CustomerController from '@/actions/App/Http/Controllers/CustomerController';
 import { index as customersIndex } from '@/routes/customers';
@@ -22,6 +23,8 @@ import { PaginatedResponse } from '@/types/paginated-response';
 import { Customer } from '@/types/customer';
 import LabeledInput from '@/components/ui/labeled-input';
 import LabeledSelect from '@/components/ui/labeled-select';
+import states from '../../../utils/states.json';
+import cities from '../../../utils/cities.json';
 
 type CustomersPageProps = {
     customers: PaginatedResponse<Customer>;
@@ -110,6 +113,11 @@ export default function CustomersIndex({
             restored: 'Customer restored successfully',
         },
     });
+    
+    const filteredCities = useMemo(() => {
+        if (!data.state) return [];
+        return cities.filter((c) => c.code === data.state);
+    }, [data.state]);
 
     const columns: Column<Customer>[] = [
         {
@@ -267,13 +275,28 @@ export default function CustomersIndex({
                             label="Customer Type"
                             name="customer_type"
                             value={data.customer_type}
-                            onChange={(value) => setData('customer_type', value)}
+                            onChange={(value) => {
+                                setData((prev) => ({
+                                    ...prev,
+                                    customer_type: value,
+                                    tax_id: value === '2' ? prev.tax_id : '',
+                                }));
+                            }}
                             options={[
                                 { value: '1', label: 'Customer' },
                                 { value: '2', label: 'Company' },
                             ]}
                             error={errors.customer_type}
                         />
+                        {data.customer_type === '2' && (
+                            <LabeledInput
+                                label="Tax ID"
+                                name="tax_id"
+                                value={data.tax_id}
+                                onChange={(value) => setData('tax_id', value)}
+                                error={errors.tax_id}
+                            />
+                        )}
                         <LabeledInput
                             label="Name"
                             name="name"
@@ -297,6 +320,40 @@ export default function CustomersIndex({
                             onChange={(value) => setData('phone', value)}
                             error={errors.phone}
                         />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <LabeledSelect
+                                label="State"
+                                name="state"
+                                value={data.state}
+                                onChange={(value) => {
+                                    setData((prev) => ({
+                                        ...prev,
+                                        state: value,
+                                        city: '',
+                                    }));
+                                }}
+                                options={states.map((s) => ({
+                                    value: s.code,
+                                    label: s.name,
+                                }))}
+                                error={errors.state}
+                            />
+                            <LabeledSelect
+                                label="City"
+                                name="city"
+                                value={data.city}
+                                onChange={(value) => setData('city', value)}
+                                options={filteredCities.map((c) => ({
+                                    value: c.name,
+                                    label: c.name,
+                                }))}
+                                error={errors.city}
+                                disabled={!data.state}
+                                placeholder={!data.state ? "Select a state first" : "Select a city"}
+                            />
+                        </div>
+
                         <LabeledInput
                             label="Address"
                             name="address"
