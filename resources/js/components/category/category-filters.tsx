@@ -12,11 +12,11 @@ import { X } from 'lucide-react';
 
 interface CategoryFiltersProps {
     filters: { search: string; status: string };
-    updateFilter: (key: 'search' | 'status', value: string) => void;
+    updateFilter: (key: keyof CategoryFiltersProps['filters'], value: string) => void;
     applyFilters: () => void;
     clearFilters: () => void;
     hasActiveFilters: boolean;
-    navigate: (page?: number, overrides?: Partial<{ search: string; status: string }>) => void;
+    navigate: (page?: number, overrides?: Partial<CategoryFiltersProps['filters']>) => void;
 }
 
 export function CategoryFilters({
