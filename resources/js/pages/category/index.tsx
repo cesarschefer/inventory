@@ -16,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { useResourceCrud } from '@/hooks/use-resource-crud';
 import { useFilters } from '@/hooks/use-filters';
 import { PaginatedResponse } from '@/types/paginated-response';
@@ -157,37 +158,45 @@ export default function CategoriesIndex({
                         icon: <Plus className="h-4 w-4" />,
                     }}
                     filters={
-                        <div className="flex gap-3">
-                            <Input
-                                placeholder="Search by category name..."
-                                value={filters.search}
-                                onChange={(e) =>
-                                    updateFilter('search', e.target.value)
-                                }
-                                onBlur={applyFilters}
-                            />
-                            <Select
-                                value={filters.status}
-                                onValueChange={(value) => {
-                                    updateFilter('status', value);
-                                    navigate(1, { status: value });
-                                }}
-                            >
-                                <SelectTrigger className="w-40">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">Active</SelectItem>
-                                    <SelectItem value="2">Inactive</SelectItem>
-                                    <SelectItem value="3">All</SelectItem>
-                                </SelectContent>
-                            </Select>
+                        <div className="flex items-end gap-3 flex-wrap">
+                            <div className="flex-1 min-w-[200px]">
+                                <Label className="mb-1.5 block px-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">Search</Label>
+                                <Input
+                                    placeholder="Enter name..."
+                                    value={filters.search}
+                                    onChange={(e) =>
+                                        updateFilter('search', e.target.value)
+                                    }
+                                    onBlur={applyFilters}
+                                />
+                            </div>
+
+                            <div className="w-40">
+                                <Label className="mb-1.5 block px-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</Label>
+                                <Select
+                                    value={filters.status}
+                                    onValueChange={(value) => {
+                                        updateFilter('status', value);
+                                        navigate(1, { status: value });
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">Active</SelectItem>
+                                        <SelectItem value="2">Inactive</SelectItem>
+                                        <SelectItem value="3">All</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
                             {hasActiveFilters && (
                                 <Button
                                     variant="primary"
                                     className='cursor-pointer'
                                     onClick={clearFilters}
+                                    size="icon"
                                 >
                                     <X className="h-4 w-4" />
                                 </Button>
