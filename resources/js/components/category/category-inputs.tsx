@@ -1,9 +1,16 @@
 import LabeledInput from '@/components/ui/labeled-input';
 
+interface CategoryData {
+    name: string;
+}
+
 interface CategoryInputsProps {
-    data: { name: string };
-    setData: (key: 'name', value: string) => void;
-    errors: Partial<Record<'name', string>>;
+    data: CategoryData;
+    setData: {
+        (key: keyof CategoryData, value: string): void;
+        (updater: (prev: CategoryData) => CategoryData): void;
+    };
+    errors: Partial<Record<keyof CategoryData, string>>;
 }
 
 export function CategoryInputs({ data, setData, errors }: CategoryInputsProps) {
