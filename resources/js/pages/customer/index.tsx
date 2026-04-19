@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useMemo } from 'react';
-import { PenSquare, Plus, RefreshCw, Search, Trash, X } from 'lucide-react';
+import { Building2, PenSquare, Plus, RefreshCw, Search, Trash, User, X } from 'lucide-react';
 import CustomerController from '@/actions/App/Http/Controllers/CustomerController';
 import { index as customersIndex } from '@/routes/customers';
 import { Column, PaginatedTable } from '@/components/shared/paginated-table';
@@ -8,6 +8,7 @@ import { FormDialog } from '@/components/shared/form-dialog';
 import { ConfirmDialog } from '@/components/shared/confirm-dialog';
 import { PageFilters } from '@/components/shared/page-filters';
 import { PageHeader } from '@/components/shared/page-header';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -135,13 +136,28 @@ export default function CustomersIndex({
         },
         {
             header: 'Customer Type',
-            cell: (cat) => cat.customer_type,
+            cell: (cat) =>
+                cat.customer_type === 1 ? (
+                    <Badge variant="outline" className="gap-1.5">
+                        <User className="h-3.5 w-3.5" />
+                        Customer
+                    </Badge>
+                ) : (
+                    <Badge variant="secondary" className="gap-1.5">
+                        <Building2 className="h-3.5 w-3.5" />
+                        Company
+                    </Badge>
+                ),
         },
         {
             header: 'Status',
             align: 'center',
             cell: (cat) =>
-                cat.deleted_at ? 'Inactive' : 'Active',
+                cat.deleted_at ? (
+                    <Badge variant="destructive">Inactive</Badge>
+                ) : (
+                    <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800">Active</Badge>
+                ),
         },
         {
             header: 'Edit',
