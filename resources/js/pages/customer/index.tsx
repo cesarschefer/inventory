@@ -229,7 +229,7 @@ export default function CustomersIndex({
                     filters={
                         <div className="flex gap-3">
                             <Input
-                                placeholder="Search..."
+                                placeholder="Search by name..."
                                 value={filters.search}
                                 onChange={(e) =>
                                     updateFilter('search', e.target.value)

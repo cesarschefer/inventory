@@ -159,7 +159,7 @@ export default function CategoriesIndex({
                     filters={
                         <div className="flex gap-3">
                             <Input
-                                placeholder="Search..."
+                                placeholder="Search by category name..."
                                 value={filters.search}
                                 onChange={(e) =>
                                     updateFilter('search', e.target.value)
