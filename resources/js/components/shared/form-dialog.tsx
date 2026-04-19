@@ -36,6 +36,7 @@ type FormDialogProps = {
     cancelLabel?: string;
     onCancel?: () => void;
     disableCancel?: boolean;
+    maxWidth?: string;
 };
 
 export function FormDialog({
@@ -53,10 +54,11 @@ export function FormDialog({
     cancelLabel = 'Cancel',
     onCancel,
     disableCancel = false,
+    maxWidth = 'sm:max-w-md',
 }: FormDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className={maxWidth}>
                 <DialogHeader>
                     <DialogTitle
                         className={icon ? 'flex items-center gap-2' : undefined}
