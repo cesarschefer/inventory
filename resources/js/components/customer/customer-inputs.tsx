@@ -12,7 +12,7 @@ interface City {
 
 interface CustomerData {
     customer_type: string;
-    tax_id: string | null;
+    tax_id: string;
     name: string;
     email: string;
     phone: string;
