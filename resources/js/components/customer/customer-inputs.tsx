@@ -20,7 +20,7 @@ interface CustomerData {
     city: string;
     address: string;
     floor: string;
-    apartment: string;
+    apartment: number;
 }
 
 interface CustomerInputsProps {
