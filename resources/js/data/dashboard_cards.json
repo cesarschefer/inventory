@@ -1,0 +1,51 @@
+[
+  {
+    "title": "Customers",
+    "key": "customers",
+    "href": "/customers",
+    "bg": "emerald",
+    "permission": "view-customers"
+  },
+  {
+    "title": "Suppliers",
+    "key": "suppliers",
+    "href": "/suppliers",
+    "bg": "orange",
+    "permission": "view-suppliers"
+  },
+  {
+    "title": "Product Categories",
+    "key": "categories",
+    "href": "/categories",
+    "bg": "amber",
+    "permission": "view-categories"
+  },
+  {
+    "title": "Products",
+    "key": "products",
+    "href": "/products",
+    "bg": "purple",
+    "permission": "view-products"
+  },
+  {
+    "title": "Users",
+    "key": "users",
+    "href": "/users",
+    "bg": "indigo",
+    "permission": "manage-users"
+  },
+  {
+    "title": "Purchase Invoices",
+    "key": "purchase_invoices",
+    "href": "/purchase-invoices",
+    "bg": "teal",
+    "permission": "view-purchases"
+  },
+  {
+    "title": "Sale Invoices",
+    "key": "sale_invoices",
+    "href": "/sale-invoices",
+    "bg": "rose",
+    "permission": "view-sales"
+  }
+]
